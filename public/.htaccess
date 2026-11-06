@@ -24,8 +24,11 @@ DirectoryIndex index.html
   </If>
 </IfModule>
 
-# HTTPS + domaine sans www (à activer une fois le certificat SSL émis par o2switch)
-# RewriteEngine On
-# RewriteCond %{HTTPS} off [OR]
-# RewriteCond %{HTTP_HOST} ^www\. [NC]
-# RewriteRule ^ https://frensh-cannes.fr%{REQUEST_URI} [L,R=301]
+# HTTPS + domaine sans www (certificat Let's Encrypt via acme.sh, renouvelé par le cron du compte)
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://frensh-cannes.fr%{REQUEST_URI} [L,R=301]
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+</IfModule>
