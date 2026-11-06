@@ -1,7 +1,82 @@
 ---
 import Switcher from '../components/Switcher.astro';
-interface Props { title: string; description: string; theme?: string; current?: 1 | 2 | 3; }
-const { title, description, theme = '#111', current } = Astro.props;
+import { site, faq } from '../data/frensh';
+
+interface Props {
+  title: string;
+  description: string;
+  theme?: string;
+  current?: 1 | 2 | 3;
+  /** Old mock-ups: noindex, no canonical, no structured data. */
+  noindex?: boolean;
+}
+const { title, description, theme = '#111', current, noindex = false } = Astro.props;
+
+/* Production domain: canonical, Open Graph and JSON-LD always point here, even on the GitHub Pages copy (BASE_PATH=/frensh). */
+const PROD = 'https://frensh-cannes.fr';
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const rel = Astro.url.pathname.startsWith(baseUrl) ? Astro.url.pathname.slice(baseUrl.length) : Astro.url.pathname.replace(/^\//, '');
+const pageUrl = new URL(rel, `${PROD}/`).href;
+const home = `${PROD}/`;
+const isHome = rel === '' || rel === 'index.html';
+
+const ogImage = `${PROD}/og/frensh-cannes.jpg`;
+const ogImageAlt = 'Frensh, bar-bistrot rue Félix Faure à Cannes';
+
+/* Structured data (home page only). No aggregateRating: the ratings come from Google, TripAdvisor and Facebook,
+   and Google does not allow a business to mark up third-party reviews about itself. */
+const restaurant = {
+  '@type': ['Restaurant', 'BarOrPub'],
+  '@id': `${home}#restaurant`,
+  name: site.name,
+  description,
+  url: home,
+  telephone: site.phoneIntl.replace(/\s/g, ''),
+  image: [ogImage, `${PROD}/images/service-terrasse.jpg`, `${PROD}/images/salle-interieur.jpg`, `${PROD}/images/petit-dej-terrasse.jpg`],
+  logo: `${PROD}/images/logo-frensh.png`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    postalCode: site.address.zip,
+    addressLocality: site.address.city,
+    addressRegion: 'Alpes-Maritimes',
+    addressCountry: 'FR',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: site.address.lat, longitude: site.address.lng },
+  hasMap: site.address.mapsViewUrl,
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: site.hours.open,
+    closes: site.hours.close,
+  }],
+  servesCuisine: ['Française', 'Brasserie'],
+  priceRange: '€€',
+  hasMenu: `${home}#carte`,
+  acceptsReservations: true,
+  amenityFeature: [
+    { '@type': 'LocationFeatureSpecification', name: 'Terrasse', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Chiens acceptés', value: true },
+  ],
+  sameAs: [site.social.instagram, site.social.facebook],
+};
+const website = {
+  '@type': 'WebSite',
+  '@id': `${home}#website`,
+  url: home,
+  name: site.name,
+  inLanguage: ['fr', 'en'],
+  publisher: { '@id': `${home}#restaurant` },
+};
+const faqPage = {
+  '@type': 'FAQPage',
+  '@id': `${home}#faq`,
+  inLanguage: 'fr',
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const jsonLd = isHome
+  ? JSON.stringify({ '@context': 'https://schema.org', '@graph': [restaurant, website, faqPage] }).replace(/</g, '\\u003c')
+  : null;
 ---
 <!doctype html>
 <html lang="fr" data-lang="fr">
@@ -10,20 +85,29 @@ const { title, description, theme = '#111', current } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={pageUrl} />}
     <meta name="theme-color" content={theme} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta property="og:url" content={pageUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/images/service-terrasse.jpg" />
-    <script type="application/ld+json" set:html={JSON.stringify({
-      '@context': 'https://schema.org', '@type': 'Restaurant', name: 'Frensh',
-      servesCuisine: 'Brasserie française', telephone: '+33493302054',
-      address: { '@type': 'PostalAddress', streetAddress: '43 bis rue Félix Faure', postalCode: '06400', addressLocality: 'Cannes', addressCountry: 'FR' },
-      geo: { '@type': 'GeoCoordinates', latitude: 43.552113, longitude: 7.013918 },
-      openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], opens: '09:00', closes: '22:30' }],
-    })} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
     <script is:inline>
       try { const l = localStorage.getItem('frensh-lang'); if (l === 'en' || l === 'fr') { document.documentElement.dataset.lang = l; document.documentElement.lang = l; } } catch (e) {}
     </script>

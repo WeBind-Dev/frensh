@@ -15,7 +15,7 @@ const firstItem = (m: (typeof moments)[number]) => strip(m.items[0] ?? m.line).s
 const sym: Record<string, string> = { signature: '★', maison: 'M', 'végé': 'V', vegan: 'VG' };
 const posters = gallery.slice(0, 6);
 ---
-<Base title="FREnSH · Départs toute la journée, 9h–22h30 · Brasserie à Cannes" description={pitch.short} theme="#141414" current={2}>
+<Base noindex title="FREnSH · Départs toute la journée, 9h–22h30 · Brasserie à Cannes" description={pitch.short} theme="#141414" current={2}>
   <div class="t">
     <header class="quai-top">
       <a href="#" class="brand"><img src="/images/logo-frensh.png" alt="FREnSH" width="56" height="62" /></a>

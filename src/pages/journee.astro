@@ -20,7 +20,7 @@ const railHours = ['09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '
 const salads = menu.flatMap((c) => c.items).filter((i) => /salade|burrata|burratina|césar|cesar|falafel|feta/i.test(i.name)).slice(0, 4);
 const google = ratings.find((r) => /google/i.test(r.source));
 ---
-<Base title="FREnSH · Une journée à Cannes, de 9h à 22h30 · Brasserie rue Félix Faure" description={pitch.short} theme="#dfeaf1" current={3}>
+<Base noindex title="FREnSH · Une journée à Cannes, de 9h à 22h30 · Brasserie rue Félix Faure" description={pitch.short} theme="#dfeaf1" current={3}>
   <div class="j" data-stops={JSON.stringify(stops)}>
     <header class="top">
       <a href="#t0900" class="logo"><img src="/images/logo-frensh.png" alt="FREnSH" width="54" height="60" /></a>
