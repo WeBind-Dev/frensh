@@ -54,7 +54,7 @@ const posters = gallery.slice(0, 6);
             ))}
           </div>
           <div class="ticker" aria-hidden="true">
-            {[0, 1].map(() => <p><span lang="fr">Information voyageurs · Frites maison · Happy hour de 17h à 20h · Réservation au {site.phone} · Livraison Deliveroo · Terrasse face aux Allées de la Liberté ·</span><span lang="en">Passenger information · Homemade fries · Happy hour 5–8 pm · Book on {site.phone} · Deliveroo delivery · Terrace facing the Allées de la Liberté ·</span></p>)}
+            {[0, 1].map(() => <p><span lang="fr">Information voyageurs · Frites fraîches · Réservation au {site.phone} · Terrasse face aux Allées de la Liberté ·</span><span lang="en">Passenger information · Fresh fries · Book on {site.phone} · Terrace facing the Allées de la Liberté ·</span></p>)}
           </div>
         </div>
 
@@ -94,7 +94,7 @@ const posters = gallery.slice(0, 6);
       <section class="horaires" id="horaires" aria-labelledby="h-hor">
         <div class="h-head">
           <h2 id="h-hor"><T fr="Fiche horaire · la carte" en="Timetable · the menu" /></h2>
-          <p><T fr="Les prix sont affichés sur place. Le plat du jour change chaque jour : demandez au comptoir." en="Prices are displayed on site. The daily special changes every day: ask at the counter." /></p>
+          <p><T fr="Carte de novembre 2026, prix en euros. Elle peut changer : demandez au comptoir." en="November 2026 menu, prices in euros. It may change: ask at the counter." /></p>
         </div>
         <div class="sheet">
           {menu.map((cat) => (
@@ -116,7 +116,6 @@ const posters = gallery.slice(0, 6);
             <p><b>★</b> <T fr="la signature de la maison" en="house signature" /></p>
             <p><b>M</b> <T fr="fait maison" en="homemade" /></p>
             <p><b>V</b> <T fr="végétarien" en="vegetarian" /> · <b>VG</b> vegan</p>
-            <p class="fine"><T fr="Pas le temps ? Livraison via" en="In a hurry? Delivery via" /> <a href={site.delivery.url} target="_blank" rel="noopener">Deliveroo</a>.</p>
           </aside>
         </div>
       </section>

@@ -6,11 +6,11 @@ import '@fontsource-variable/commissioner/wght.css';
 import Base from '../layouts/Base.astro';
 import T from '../components/T.astro';
 import Logo from '../components/Logo.astro';
-import { site, pitch, moments, menu, ratings, reviews, around, story, faq } from '../data/frensh';
+import { site, pitch, moments, menu, menuGroups, menuNote, ratings, reviews, around, story, faq } from '../data/frensh';
 
 const crates = [
   { photo: '/images/petit-dej-terrasse.jpg', fr: 'Croissant, jus pressé', en: 'Croissant, fresh juice', tag: 'dès 9h', tagEn: 'from 9 am', alt: 'Croissant, jus d’orange pressé et café sur la terrasse au soleil', stamp: 'CAT. MATIN' },
-  { photo: '/images/burrata.jpg', fr: 'Burrata, tomates', en: 'Burrata, tomatoes', tag: 'le midi', tagEn: 'lunch', alt: 'Burrata au pesto entourée de tomates cerises et olives noires', stamp: 'CAT. EXTRA' },
+  { photo: '/images/salade-cesar.jpg', fr: 'Salade Caesar', en: 'Caesar salad', tag: 'le midi', tagEn: 'lunch', alt: 'Salade Caesar au poulet croustillant, croûtons et parmesan', stamp: 'CAT. EXTRA' },
   { photo: '/images/cocktail-terrasse.jpg', fr: 'Spritz en terrasse', en: 'Spritz on the terrace', tag: '17h–20h', tagEn: '5–8 pm', alt: 'Cocktail rouge à la menthe sur une table en marbre noir de la terrasse', stamp: 'ORIG. CANNES' },
 ];
 const google = ratings.find((r) => /google/i.test(r.source));
@@ -103,29 +103,36 @@ const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g
       <section class="carte" id="carte" aria-labelledby="h-carte">
         <div class="carte-head">
           <h2 id="h-carte"><T fr="La carte" en="The menu" /></h2>
-          <p><T fr="Les prix sont à l’ardoise, sur place. La carte bouge avec le marché : demandez le plat du jour." en="Prices are on the board, on site. The menu follows the market: ask for today’s special." /></p>
+          <p><T fr={fine(menuNote.text)} en={menuNote.textEn} /></p>
         </div>
-        <div class="stalls">
-          {menu.map((cat) => (
-            <section class="stall" aria-labelledby={`cat-${cat.id}`}>
-              <h3 id={`cat-${cat.id}`} class="stall-sign"><T fr={fine(cat.title)} en={cat.titleEn} /></h3>
-              {cat.note && <p class="stall-note">{cat.note}</p>}
-              <ul>
-                {cat.items.map((it) => (
-                  <li>
-                    <p class="it-n"><T fr={fine(it.name)} en={it.nameEn} />{it.tags.includes('signature') && <span class="star"><T fr="la signature" en="signature" /></span>}</p>
-                    {it.desc && <p class="it-d"><T fr={fine(it.desc)} en={it.descEn} /></p>}
-                    {it.tags.filter((t) => t !== 'signature').length > 0 && <p class="it-t">{it.tags.filter((t) => t !== 'signature').join(' · ')}</p>}
-                  </li>
-                ))}
-              </ul>
-            </section>
+        <div class="tabs" role="tablist" aria-label="Rubriques de la carte" data-tabs hidden>
+          {menuGroups.map((g, i) => (
+            <button class="pick tab" type="button" role="tab" id={`tab-${g.id}`} aria-controls={`panel-${g.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}><T fr={g.title} en={g.titleEn} /></button>
           ))}
         </div>
-        <div class="deliver">
-          <p><T fr="Pas le temps de s’asseoir ? On livre avec Deliveroo." en="No time to sit down? We deliver with Deliveroo." /></p>
-          <a class="btn green" href={site.delivery.url} target="_blank" rel="noopener"><T fr="Commander" en="Order" /></a>
-        </div>
+        {menuGroups.map((g) => (
+          <div class="panel" id={`panel-${g.id}`} role="tabpanel" aria-labelledby={`tab-${g.id}`} data-panel>
+            <h3 class="panel-title"><T fr={g.title} en={g.titleEn} /></h3>
+            <div class="stalls">
+              {menu.filter((c) => c.group === g.id).map((cat) => (
+                <section class="stall" aria-labelledby={`cat-${cat.id}`}>
+                  <h4 id={`cat-${cat.id}`} class="stall-sign"><T fr={fine(cat.title)} en={cat.titleEn} /></h4>
+                  {cat.note && <p class="stall-note"><T fr={fine(cat.note)} en={cat.noteEn ?? cat.note} /></p>}
+                  <ul>
+                    {cat.items.map((it) => (
+                      <li>
+                        <p class="it-n"><span class="it-name"><T fr={fine(it.name).replace(/œ/g, 'oe')} en={it.nameEn} />{it.tags.includes('signature') && <span class="star"><T fr="coup de cœur" en="house favourite" /></span>}</span><span class="it-p">{it.price.replace(/ €/g, '\u00a0€').replace(/ \/ /g, '\u00a0/ ')}</span></p>
+                        {it.desc && <p class="it-d"><T fr={fine(it.desc)} en={it.descEn} /></p>}
+                        {it.tags.filter((t) => t !== 'signature').length > 0 && <p class="it-t">{it.tags.filter((t) => t !== 'signature').join(' · ')}</p>}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          </div>
+        ))}
+        <p class="allergens"><T fr={fine(menuNote.allergens)} en={menuNote.allergensEn} /></p>
       </section>
 
       <!-- AVIS -->
@@ -230,7 +237,7 @@ const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g
   .m *, .m *::before, .m *::after { box-sizing: border-box; }
   .m :global(::selection) { background: var(--green); color: var(--chalk); }
   .m :global(:focus-visible) { outline: 3px solid var(--ring); outline-offset: 3px; }
-  :global(:where(.m) :is(h1, h2, h3)) { font-family: var(--sign); font-weight: 400; letter-spacing: -0.015em; line-height: 1.08; text-wrap: balance; margin: 0; }
+  :global(:where(.m) :is(h1, h2, h3, h4)) { font-family: var(--sign); font-weight: 400; letter-spacing: -0.015em; line-height: 1.08; text-wrap: balance; margin: 0; }
   :global(:where(.m) p) { text-wrap: pretty; }
   :global(:where(.m) img) { display: block; max-width: 100%; }
   :global(:where(.m) a) { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
@@ -344,12 +351,23 @@ const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g
   .stall ul { list-style: none; margin: 0; padding: 0; }
   .stall li { padding: 12px 0; border-bottom: 1px solid rgb(243 239 228 / 0.12); }
   .stall li:last-child { border-bottom: 0; padding-bottom: 6px; }
-  .it-n { margin: 0; font: 700 1.4rem/1.2 var(--hand); display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+  .it-n { margin: 0; font: 700 1.3rem/1.25 var(--hand); display: flex; align-items: baseline; gap: 12px; }
+  .it-name { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+  .it-p { flex: none; margin-left: auto; font: 650 1rem/1.3 var(--text); font-variant-numeric: tabular-nums lining-nums; color: var(--leaf); white-space: nowrap; text-align: right; }
   .star { font: 650 0.68rem/1 var(--text); letter-spacing: 0.1em; text-transform: uppercase; background: var(--leaf); color: var(--slate); padding: 5px 7px 4px; border-radius: 3px; translate: 0 -2px; }
   .it-d { margin: 4px 0 0; font-size: 0.9375rem; font-weight: 450; line-height: 1.5; letter-spacing: 0.005em; color: var(--chalk-2); }
   .it-t { margin: 6px 0 0; font: 650 0.7rem/1.2 var(--text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--leaf); }
-  .deliver { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 12px; padding-top: 24px; border-top: 2px dashed rgb(29 26 22 / 0.25); font-weight: 600; }
-  .deliver p { margin: 0; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 10px 12px; margin: 0 0 clamp(24px, 3vw, 40px); }
+  .tabs[hidden] { display: none; }
+  .tab { border: 0; cursor: pointer; font-size: 1.3rem; padding: 9px 18px 8px; background: transparent; color: var(--green); box-shadow: inset 0 0 0 2px var(--green); }
+  .tab:hover { background: rgb(54 69 44 / 0.1); }
+  .tab[aria-selected='true'] { background: var(--green); color: var(--chalk); box-shadow: 0 3px 6px rgb(40 25 5 / 0.25); transform: rotate(0deg) translateY(-2px); }
+  .panel + .panel { margin-top: clamp(24px, 3vw, 40px); }
+  .panel-title { font-size: clamp(1.8rem, 1.2rem + 1.6vw, 2.6rem); color: var(--green); margin-bottom: 20px; }
+  .carte.has-tabs .panel-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .carte.has-tabs .panel + .panel { margin-top: 0; }
+  .carte.has-tabs .panel:not(.is-active) { display: none; }
+  .allergens { margin: 12px 0 0; padding-top: 22px; border-top: 2px dashed rgb(28 36 23 / 0.25); font-weight: 600; color: var(--ink-2); }
 
   /* ---------- avis ---------- */
   .avis { padding: 0 var(--pad) var(--sec); }
@@ -463,4 +481,32 @@ const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g
     });
   };
   mark(); setInterval(mark, 60_000);
+
+  // Onglets de la carte : sans JS, toutes les rubriques restent affichées les unes sous les autres.
+  const carte = document.querySelector<HTMLElement>('.carte');
+  const tablist = carte?.querySelector<HTMLElement>('[data-tabs]');
+  if (carte && tablist) {
+    const tabs = [...tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (tab: HTMLButtonElement, focus = false) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls') || '')?.classList.toggle('is-active', on);
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', (e) => {
+        const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (k) { e.preventDefault(); select(tabs[(i + k + tabs.length) % tabs.length], true); }
+        if (e.key === 'Home') { e.preventDefault(); select(tabs[0], true); }
+        if (e.key === 'End') { e.preventDefault(); select(tabs[tabs.length - 1], true); }
+      });
+    });
+    tablist.hidden = false;
+    carte.classList.add('has-tabs');
+    select(tabs[0]);
+  }
 </script>

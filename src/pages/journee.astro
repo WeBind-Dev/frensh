@@ -73,7 +73,7 @@ const google = ratings.find((r) => /google/i.test(r.source));
         <div class="plates">
           <figure><img src="/images/salade-cesar.jpg" alt="Salade César au poulet et sucrine" loading="lazy" /><figcaption>{salads[0]?.name ?? 'Salade César'}</figcaption></figure>
           <figure><img src="/images/salade-falafels.jpg" alt="Salade aux falafels, avocat et légumes croquants" loading="lazy" /><figcaption>{salads[1]?.name ?? 'Salade falafels'}</figcaption></figure>
-          <figure><img src="/images/plat-souris-agneau.jpg" alt="Plat du jour : souris d’agneau et purée" loading="lazy" /><figcaption><T fr="Le plat du jour" en="Today’s special" /></figcaption></figure>
+          <figure><img src="/images/salade-falafels.jpg" alt="Salade Veggie falafel" loading="lazy" /><figcaption><T fr="La salade Veggie falafel" en="Veggie falafel salad" /></figcaption></figure>
           <figure><img src="/images/salade-feta-pasteque.jpg" alt="Salade feta, pastèque et olives" loading="lazy" /><figcaption>{salads[3]?.name ?? 'Feta & pastèque'}</figcaption></figure>
         </div>
       </section>
@@ -102,7 +102,7 @@ const google = ratings.find((r) => /google/i.test(r.source));
           <img class="a2" src="/images/cocktail-terrasse.jpg" alt="Cocktail rouge à la menthe en terrasse" loading="lazy" />
           <img class="a3" src="/images/apero-biere-vin.jpg" alt="Bière pression, verre de vin blanc et planche de fromage en terrasse" loading="lazy" />
           <div class="apero-copy">
-            <h2><T fr={m.apero?.title ?? 'Happy hour'} en={m.apero?.titleEn ?? 'Happy hour'} /></h2>
+            <h2><T fr={m.apero?.title ?? 'L’apéro'} en={m.apero?.titleEn ?? 'Aperitivo'} /></h2>
             <p class="hh">17h – 20h</p>
             <p><T fr={m.apero?.text ?? ''} en={m.apero?.textEn ?? ''} /></p>
           </div>
@@ -114,7 +114,7 @@ const google = ratings.find((r) => /google/i.test(r.source));
         <div class="soir-head">
           <h2><T fr="La carte, en entier" en="The whole menu" /></h2>
           <p><T fr={m.soir?.text ?? ''} en={m.soir?.textEn ?? ''} /></p>
-          <p class="fine"><T fr="Prix affichés sur place · plat du jour à l’ardoise" en="Prices displayed on site · daily special on the board" /></p>
+          <p class="fine"><T fr="Carte de novembre 2026, prix en euros" en="November 2026 menu, prices in euros" /></p>
         </div>
         <div class="menu">
           {menu.map((cat) => (
@@ -128,7 +128,6 @@ const google = ratings.find((r) => /google/i.test(r.source));
             </section>
           ))}
         </div>
-        <p class="deliver"><T fr="Ce soir, à la maison ?" en="Staying in tonight?" /> <a href={site.delivery.url} target="_blank" rel="noopener"><T fr="Commander sur Deliveroo" en="Order on Deliveroo" /></a></p>
       </section>
 
       <section id="t2230" class="stop nuit" data-time="22:30">
