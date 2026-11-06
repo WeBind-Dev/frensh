@@ -18,7 +18,7 @@ const others = ratings.filter((r) => r !== google);
 /** Typographie française : espace fine insécable avant ? ! : ; » et après «, pour qu'aucun signe ne tombe seul à la ligne. */
 const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g, '«\u202f');
 ---
-<Base title="Bar-brasserie à Cannes, terrasse rue Félix Faure | Frensh" description="Bar-brasserie rue Félix Faure à Cannes, face aux Allées de la Liberté, près du Vieux-Port. Cuisine faite sur place, terrasse au soleil, 7j/7 de 9h à 22h30." theme="#36452c" current={1}>
+<Base title="Bar-brasserie à Cannes, face aux Allées de la Liberté | Frensh" description="Rue Félix Faure, près du Vieux-Port. Ouvert 7j/7 de 9h à 22h30, terrasse au soleil, du petit-déj à 8,90 € au dîner. Cuisine faite sur place." theme="#36452c" current={1}>
   <div class="m">
     <header class="top">
       <a href="#" class="logo" aria-label="Frensh, accueil"><Logo /></a>

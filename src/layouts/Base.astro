@@ -1,6 +1,6 @@
 ---
 import Switcher from '../components/Switcher.astro';
-import { site, faq } from '../data/frensh';
+import { site, faq, pitch } from '../data/frensh';
 
 interface Props {
   title: string;
@@ -29,7 +29,10 @@ const restaurant = {
   '@type': ['Restaurant', 'BarOrPub'],
   '@id': `${home}#restaurant`,
   name: site.name,
-  description,
+  /* Spellings seen on Google Maps (« Restaurant FREnSH »), the old logo and listings. Google suggests « french cannes » for « frensh cannes ». */
+  alternateName: ['FREnSH', 'Le Frensh'],
+  /* The visible lede (« Bar-brasserie rue Félix Faure, à Cannes… »), self-contained, rather than the meta description written for the results page. */
+  description: pitch.short,
   url: home,
   telephone: site.phoneIntl.replace(/\s/g, ''),
   image: [ogImage, `${PROD}/images/service-terrasse.jpg`, `${PROD}/images/salle-interieur.jpg`, `${PROD}/images/petit-dej-terrasse.jpg`],

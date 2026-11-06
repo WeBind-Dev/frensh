@@ -153,9 +153,9 @@ export const pitch = {
   headline: 'Du croissant au dernier verre, en face des Allées.',
   headlineEn: 'From the morning croissant to the last glass, across from the Allées.',
   short:
-    'Brasserie française rue Félix Faure, à Cannes. On cuisine sur place avec des produits frais, la terrasse prend le soleil, et c’est ouvert tous les jours de 9h à 22h30.',
+    'Bar-brasserie rue Félix Faure, à Cannes. On cuisine sur place avec des produits frais, la terrasse prend le soleil, et c’est ouvert tous les jours de 9h à 22h30.',
   shortEn:
-    'A French brasserie on rue Félix Faure, Cannes. Everything is cooked here with fresh produce, the terrace gets the sun, and we’re open every day from 9 am to 10:30 pm.',
+    'A bar-brasserie on rue Félix Faure, Cannes. Everything is cooked here with fresh produce, the terrace gets the sun, and we’re open every day from 9 am to 10:30 pm.',
   long: [
     'Frensh, c’est fresh et french dans le même mot. Le nom dit l’essentiel : des classiques de brasserie préparés sur place avec des produits frais. Salades, clubs, croques, burgers, fish and chips, tartares, entrecôte Simmental. Et des frites fraîches que les clients citent encore dans leurs avis.',
     'On est au 43 bis rue Félix Faure, dans la partie piétonne, en face des Allées de la Liberté. Le Vieux-Port est à trois minutes à pied, le Palais à quatre. Depuis la terrasse, on voit les boulistes, le kiosque et les gens qui filent au bureau.',
