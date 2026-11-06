@@ -1,5 +1,6 @@
 ---
 import Switcher from '../components/Switcher.astro';
+import Consent from '../components/Consent.astro';
 import { site, faq, pitch } from '../data/frensh';
 
 interface Props {
@@ -123,6 +124,7 @@ const jsonLd = isHome
   <body>
     <slot />
     {current && current !== 1 && <Switcher current={current} />}
+    <Consent />
     <script>
       import { initStatus, initLang } from '../scripts/frensh';
       initStatus();

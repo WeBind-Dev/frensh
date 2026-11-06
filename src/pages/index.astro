@@ -204,7 +204,7 @@ const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g
         </dl>
         <a class="btn chalk" href={site.address.mapsUrl} target="_blank" rel="noopener"><T fr="Itinéraire" en="Directions" /></a>
       </div>
-      <p class="legal">© Frensh · SAS BAMO · <T fr="Photos du quartier : Wikimedia Commons (crédits sur chaque image)." en="Area photos: Wikimedia Commons (credits on each image)." /></p>
+      <p class="legal">© Frensh · SAS BAMO · <T fr="Photos du quartier : Wikimedia Commons (crédits sur chaque image)." en="Area photos: Wikimedia Commons (credits on each image)." /> · <button type="button" class="cookie-link" data-consent-open><T fr="Cookies" en="Cookies" /></button></p>
     </footer>
   </div>
 </Base>
@@ -424,6 +424,7 @@ const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g
   .foot dd a:hover { text-decoration-thickness: 2px; }
   .foot .btn.chalk { color: var(--chalk); box-shadow: inset 0 0 0 2px var(--chalk); }
   .foot .btn.chalk:hover { background: var(--chalk); color: var(--green); }
+  .cookie-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
   .legal { margin: clamp(36px, 4vw, 52px) 0 0; padding-top: 20px; border-top: 1px solid rgb(251 248 234 / 0.3); font-size: 0.8125rem; line-height: 1.5; color: var(--chalk-2); }
 
   /* ---------- responsive ---------- */

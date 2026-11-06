@@ -1,0 +1,100 @@
+---
+/* Bandeau de consentement (CNIL) pour Google Analytics 4.
+   GA n'est chargé qu'après « Accepter », et seulement sur le domaine de production.
+   Le choix est gardé 6 mois (recommandation CNIL), puis redemandé.
+   Tout bouton portant [data-consent-open] rouvre le bandeau. */
+import T from './T.astro';
+export const GA_ID = 'G-RMW5YTTE39';
+---
+<div class="consent" data-consent hidden role="region" aria-label="Cookies">
+  <p class="consent-t"><T fr="Un petit cookie ?" en="A little cookie?" /></p>
+  <p class="consent-d"><T fr="On aimerait mesurer la fréquentation du site avec Google Analytics. Rien n’est déposé sans votre accord." en="We’d like to measure site traffic with Google Analytics. Nothing is stored without your consent." /></p>
+  <div class="consent-b">
+    <button type="button" data-consent-choice="denied"><T fr="Refuser" en="Decline" /></button>
+    <button type="button" data-consent-choice="granted"><T fr="Accepter" en="Accept" /></button>
+  </div>
+</div>
+
+<script is:inline define:vars={{ GA_ID }}>
+  (function () {
+    var KEY = 'frensh-consent';
+    var MAX_AGE = 1000 * 60 * 60 * 24 * 182; // ~6 mois
+    var PROD = location.hostname === 'frensh-cannes.fr' || location.hostname === 'www.frensh-cannes.fr';
+    var TEST = /[?&]consent-test\b/.test(location.search);
+    if (!PROD && !TEST) return;
+
+    function read() {
+      try {
+        var v = JSON.parse(localStorage.getItem(KEY) || 'null');
+        return v && Date.now() - v.at < MAX_AGE ? v.choice : null;
+      } catch (e) { return null; }
+    }
+    function loadGA() {
+      if (window.__frenshGA || !PROD) return;
+      window.__frenshGA = true;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID, { anonymize_ip: true });
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+    }
+    function clearGA() {
+      document.cookie.split(';').forEach(function (c) {
+        var n = c.split('=')[0].trim();
+        if (/^_ga/.test(n)) {
+          ['', '; domain=.frensh-cannes.fr', '; domain=frensh-cannes.fr'].forEach(function (d) {
+            document.cookie = n + '=; Max-Age=0; path=/' + d;
+          });
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var box = document.querySelector('[data-consent]');
+      if (!box) return;
+      var choice = read();
+      if (choice === 'granted') loadGA();
+      else if (!choice) box.hidden = false;
+
+      box.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-consent-choice]');
+        if (!b) return;
+        var c = b.getAttribute('data-consent-choice');
+        try { localStorage.setItem(KEY, JSON.stringify({ choice: c, at: Date.now() })); } catch (err) {}
+        box.hidden = true;
+        if (c === 'granted') loadGA();
+        else { clearGA(); if (window.__frenshGA) location.reload(); }
+      });
+      document.querySelectorAll('[data-consent-open]').forEach(function (el) {
+        el.addEventListener('click', function () { box.hidden = false; box.querySelector('button').focus(); });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .consent, .consent * { box-sizing: border-box; }
+  .consent {
+    position: fixed; z-index: 100; left: max(12px, env(safe-area-inset-left)); bottom: max(12px, env(safe-area-inset-bottom));
+    width: min(380px, calc(100vw - 24px)); padding: 18px 20px 16px;
+    background: #fbf8ea; color: #1c2417; border-radius: 10px;
+    box-shadow: 0 0 0 2px #36452c, 0 18px 40px -16px rgb(20 28 15 / 0.55);
+    font: 430 0.95rem/1.45 'Commissioner Variable', 'Segoe UI', system-ui, sans-serif;
+  }
+  .consent[hidden] { display: none; }
+  .consent p { margin: 0; }
+  .consent-t { font: 700 1.3rem/1.2 'Kalam', 'Segoe Print', cursive; color: #36452c; margin-bottom: 4px !important; }
+  .consent-d { color: #46503c; }
+  .consent-b { display: flex; gap: 10px; margin-top: 14px; }
+  .consent-b button {
+    flex: 1; min-height: 44px; border-radius: 6px; cursor: pointer;
+    font: 650 0.85rem/1 'Commissioner Variable', system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase;
+    background: #36452c; color: #fbf8ea; border: 2px solid #36452c;
+  }
+  /* Même poids visuel pour Refuser et Accepter (CNIL). */
+  .consent-b button:hover { filter: brightness(1.1); }
+  .consent-b button:focus-visible { outline: 3px solid #1c2417; outline-offset: 2px; }
+</style>
