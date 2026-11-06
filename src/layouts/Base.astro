@@ -1,0 +1,45 @@
+---
+import Switcher from '../components/Switcher.astro';
+interface Props { title: string; description: string; theme?: string; current?: 1 | 2 | 3; }
+const { title, description, theme = '#111', current } = Astro.props;
+---
+<!doctype html>
+<html lang="fr" data-lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={theme} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/service-terrasse.jpg" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'Restaurant', name: 'Frensh',
+      servesCuisine: 'Brasserie française', telephone: '+33493302054',
+      address: { '@type': 'PostalAddress', streetAddress: '43 bis rue Félix Faure', postalCode: '06400', addressLocality: 'Cannes', addressCountry: 'FR' },
+      geo: { '@type': 'GeoCoordinates', latitude: 43.552113, longitude: 7.013918 },
+      openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], opens: '09:00', closes: '22:30' }],
+    })} />
+    <script is:inline>
+      try { const l = localStorage.getItem('frensh-lang'); if (l === 'en' || l === 'fr') { document.documentElement.dataset.lang = l; document.documentElement.lang = l; } } catch (e) {}
+    </script>
+    <style is:global>
+      html[data-lang='fr'] [lang='en']:not(html), html[data-lang='en'] [lang='fr']:not(html) { display: none !important; }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+      .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <slot />
+    {current && current !== 1 && <Switcher current={current} />}
+    <script>
+      import { initStatus, initLang } from '../scripts/frensh';
+      initStatus();
+      initLang();
+    </script>
+  </body>
+</html>

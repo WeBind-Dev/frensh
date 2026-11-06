@@ -1,0 +1,22 @@
+---
+/* Review tool only: lets the owner jump between the three proposals. Remove before going live. */
+interface Props { current: 1 | 2 | 3 }
+const { current } = Astro.props;
+const items = [
+  { n: 1, href: '/', label: 'Le Marché' },
+  { n: 2, href: '/tableau', label: 'Le Tableau' },
+  { n: 3, href: '/journee', label: 'La Journée' },
+];
+---
+<nav class="switcher" aria-label="Propositions de design">
+  <a href="/propositions" class="home">Propositions</a>
+  {items.map((i) => <a href={i.href} aria-current={i.n === current ? 'page' : undefined}><b>{i.n}</b> {i.label}</a>)}
+</nav>
+<style>
+  .switcher { position: fixed; left: 12px; bottom: 12px; z-index: 90; display: flex; gap: 2px; padding: 4px; border-radius: 10px; background: rgb(20 20 20 / 0.86); font: 500 12px/1 system-ui, sans-serif; box-shadow: 0 6px 20px rgb(0 0 0 / 0.25); }
+  .switcher a { color: #ddd; text-decoration: none; padding: 7px 9px; border-radius: 7px; white-space: nowrap; }
+  .switcher a:hover { background: rgb(255 255 255 / 0.1); color: #fff; }
+  .switcher a[aria-current='page'] { background: #fff; color: #111; }
+  .switcher .home { color: #999; }
+  @media (max-width: 640px) { .switcher { bottom: auto; top: auto; left: 50%; transform: translateX(-50%); bottom: 8px; } .switcher a { padding: 6px 7px; } .switcher .home { display: none; } }
+</style>

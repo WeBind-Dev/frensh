@@ -1,0 +1,392 @@
+---
+import '@fontsource/barlow-condensed/500.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/600.css';
+import Base from '../layouts/Base.astro';
+import T from '../components/T.astro';
+import Flap from '../components/Flap.astro';
+import { site, pitch, moments, menu, ratings, reviews, around, story, faq, gallery } from '../data/frensh';
+
+const strip = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+const firstItem = (m: (typeof moments)[number]) => strip(m.items[0] ?? m.line).slice(0, 22);
+const sym: Record<string, string> = { signature: '★', maison: 'M', 'végé': 'V', vegan: 'VG' };
+const posters = gallery.slice(0, 6);
+---
+<Base title="FREnSH · Départs toute la journée, 9h–22h30 · Brasserie à Cannes" description={pitch.short} theme="#141414" current={2}>
+  <div class="t">
+    <header class="quai-top">
+      <a href="#" class="brand"><img src="/images/logo-frensh.png" alt="FREnSH" width="56" height="62" /></a>
+      <p class="station"><T fr="Cannes · rue Félix Faure" en="Cannes · rue Félix Faure" /></p>
+      <nav aria-label="Sections">
+        <a href="#horaires"><T fr="La carte" en="Menu" /></a>
+        <a href="#acces"><T fr="Accès" en="Getting here" /></a>
+        <a href="#infos"><T fr="Infos" en="Info" /></a>
+      </nav>
+      <button class="lang" type="button" data-lang-toggle>EN</button>
+    </header>
+
+    <main>
+      <section class="board-wrap" aria-labelledby="board-title">
+        <div class="board">
+          <div class="b-head">
+            <h1 id="board-title"><span lang="fr">Départs</span><span lang="en">Departures</span><small><T fr="FREnSH · 43 bis rue Félix Faure" en="FREnSH · 43 bis rue Félix Faure" /></small></h1>
+            <p class="b-clock" aria-live="off"><span class="sr-only"><T fr="Heure à Cannes" en="Time in Cannes" /></span><span class="clock" data-clock>--:--</span></p>
+          </div>
+          <div class="b-table" role="table" aria-label="Services de la journée">
+            <div class="b-row b-cols" role="row">
+              <span role="columnheader"><T fr="Heure" en="Time" /></span>
+              <span role="columnheader"><T fr="Service" en="Service" /></span>
+              <span role="columnheader" class="col-menu"><T fr="Au menu" en="On the menu" /></span>
+              <span role="columnheader" class="col-quai"><T fr="Quai" en="Platform" /></span>
+              <span role="columnheader"><T fr="Info" en="Status" /></span>
+            </div>
+            {moments.map((m) => (
+              <div class="b-row" role="row" data-from={m.from} data-to={m.to}>
+                <span role="cell"><Flap text={m.from} len={5} /></span>
+                <span role="cell"><span lang="fr"><Flap text={strip(m.title)} len={14} /></span><span lang="en"><Flap text={strip(m.titleEn)} len={14} /></span></span>
+                <span role="cell" class="col-menu"><Flap text={firstItem(m)} len={22} /></span>
+                <span role="cell" class="col-quai"><span lang="fr"><Flap text="Terrasse" len={8} /></span><span lang="en"><Flap text="Terrace" len={8} /></span></span>
+                <span role="cell" class="info" data-info><span class="info-t">À l’heure</span></span>
+              </div>
+            ))}
+          </div>
+          <div class="ticker" aria-hidden="true">
+            {[0, 1].map(() => <p><span lang="fr">Information voyageurs · Frites maison · Happy hour de 17h à 20h · Réservation au {site.phone} · Livraison Deliveroo · Terrasse face aux Allées de la Liberté ·</span><span lang="en">Passenger information · Homemade fries · Happy hour 5–8 pm · Book on {site.phone} · Deliveroo delivery · Terrace facing the Allées de la Liberté ·</span></p>)}
+          </div>
+        </div>
+
+        <div class="next">
+          <div>
+            <p class="next-k" data-status><span class="dot" aria-hidden="true"></span><span data-status-text>Ouvert · jusqu’à 22h30</span></p>
+            <p class="next-h"><T fr={pitch.headline} en={pitch.headlineEn} /></p>
+          </div>
+          <div class="next-cta">
+            <a class="btn yellow" href={site.address.mapsUrl} target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM9.8 8.9 7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3A7.3 7.3 0 0 0 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5 0-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg><T fr="Itinéraire" en="Directions" /></a>
+            <a class="btn dark" href={site.phoneHref}><T fr="Appeler" en="Call" /> · {site.phone}</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="acces" id="acces" aria-labelledby="h-acces">
+        <div class="acces-copy">
+          <h2 id="h-acces"><T fr="Correspondances" en="Connections" /></h2>
+          <p><T fr={site.address.landmark} en={site.address.landmarkEn} /></p>
+          <ul class="corr">
+            {around.map((a) => (
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM9.8 8.9 7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3A7.3 7.3 0 0 0 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5 0-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>
+                <span><T fr={a.place} en={a.placeEn} /></span>
+                <b>{a.minutes}<small>min</small></b>
+              </li>
+            ))}
+          </ul>
+          <p class="fine"><T fr="Temps de marche approximatifs." en="Approximate walking times." /></p>
+        </div>
+        <figure class="poster tall">
+          <img src="/images/service-terrasse.jpg" alt="Un serveur au tee-shirt LE FRENSH apporte les cafés sur la terrasse" loading="lazy" />
+          <figcaption><T fr="Quai unique : la terrasse." en="One platform: the terrace." /></figcaption>
+        </figure>
+      </section>
+
+      <section class="horaires" id="horaires" aria-labelledby="h-hor">
+        <div class="h-head">
+          <h2 id="h-hor"><T fr="Fiche horaire · la carte" en="Timetable · the menu" /></h2>
+          <p><T fr="Les prix sont affichés sur place. Le plat du jour change chaque jour : demandez au comptoir." en="Prices are displayed on site. The daily special changes every day: ask at the counter." /></p>
+        </div>
+        <div class="sheet">
+          {menu.map((cat) => (
+            <section class="leg" aria-labelledby={`c-${cat.id}`}>
+              <h3 id={`c-${cat.id}`}><T fr={cat.title} en={cat.titleEn} />{cat.when && <span class="when">{cat.when}</span>}</h3>
+              <table>
+                <tbody>
+                  {cat.items.map((it) => (
+                    <tr>
+                      <th scope="row"><T fr={it.name} en={it.nameEn} />{it.desc && <span class="d"><T fr={it.desc} en={it.descEn} /></span>}</th>
+                      <td class="sym">{it.tags.map((tg) => sym[tg]).filter(Boolean).join(' ')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          ))}
+          <aside class="legend" aria-label="Légende">
+            <p><b>★</b> <T fr="la signature de la maison" en="house signature" /></p>
+            <p><b>M</b> <T fr="fait maison" en="homemade" /></p>
+            <p><b>V</b> <T fr="végétarien" en="vegetarian" /> · <b>VG</b> vegan</p>
+            <p class="fine"><T fr="Pas le temps ? Livraison via" en="In a hurry? Delivery via" /> <a href={site.delivery.url} target="_blank" rel="noopener">Deliveroo</a>.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="affiches" aria-labelledby="h-aff">
+        <h2 id="h-aff"><T fr="Affiches du quai" en="On the platform" /></h2>
+        <div class="wall">
+          {posters.map((p, i) => (
+            <figure class={`poster p${i}`}>
+              <img src={p.src} alt={p.alt} loading="lazy" />
+            </figure>
+          ))}
+        </div>
+        <div class="story">
+          <h3><T fr={story.title} en={story.titleEn} /></h3>
+          {story.paragraphs.slice(0, 2).map((p, i) => <p><T fr={p} en={story.paragraphsEn[i]} /></p>)}
+        </div>
+      </section>
+
+      <section class="satisf" aria-labelledby="h-sat">
+        <h2 id="h-sat"><T fr="Satisfaction voyageurs" en="Passenger satisfaction" /></h2>
+        <ul class="sat-board">
+          {ratings.map((r) => (
+            <li><a href={r.url} target="_blank" rel="noopener"><Flap text={r.source.slice(0, 11)} len={11} /><Flap text={`${String(r.score).replace('.', ',')}/5`} len={5} class="y" /><span class="cnt">{r.count} <T fr="avis" en="reviews" /></span></a></li>
+          ))}
+        </ul>
+        {reviews.length > 0 && (
+          <ul class="quotes">
+            {reviews.slice(0, 3).map((r) => (<li lang={r.lang}><blockquote>“{r.quote}”</blockquote><a href={r.url} target="_blank" rel="noopener">{r.source}</a></li>))}
+          </ul>
+        )}
+      </section>
+
+      <section class="infos-v" aria-labelledby="h-faq">
+        <h2 id="h-faq"><T fr="Informations voyageurs" en="Passenger information" /></h2>
+        <div class="faq">
+          {faq.map((f) => (<details><summary><T fr={f.q} en={f.qEn} /></summary><p><T fr={f.a} en={f.aEn} /></p></details>))}
+        </div>
+      </section>
+    </main>
+
+    <footer class="terminus" id="infos">
+      <div class="term-board">
+        <p class="term-k"><T fr="Terminus" en="Last departure" /></p>
+        <Flap text="22:30" len={5} class="big-flap" />
+      </div>
+      <dl>
+        <div><dt><T fr="Adresse" en="Address" /></dt><dd>{site.address.street}, {site.address.zip} {site.address.city}</dd></div>
+        <div><dt><T fr="Horaires" en="Hours" /></dt><dd><T fr={site.hours.days} en={site.hours.daysEn} /> · 09:00 – 22:30</dd></div>
+        <div><dt><T fr="Réservation" en="Booking" /></dt><dd><a href={site.phoneHref}>{site.phone}</a></dd></div>
+        <div><dt><T fr="Réseaux" en="Social" /></dt><dd><a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a> · <a href={site.social.facebook} target="_blank" rel="noopener">Facebook</a></dd></div>
+      </dl>
+      <p class="legal">© FREnSH · <T fr="Photos du Frensh : établissement. Photos du quartier : Wikimedia Commons." en="FREnSH photos: the restaurant. Area photos: Wikimedia Commons." /></p>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  .t {
+    --quai: #e4e2dc; --quai-2: #d3d0c8; --ink: #151515; --ink-2: #4b4a46; --board: #121212; --cell: #1f1f1f; --flap: #f1eee6; --yellow: #ffcc1a; --red: #d0181f; --alu: #b7bcbf;
+    --cond: 'Barlow Condensed', 'Arial Narrow', sans-serif; --body: 'Barlow', system-ui, sans-serif;
+    background: var(--quai); color: var(--ink); font: 400 1.0625rem/1.55 var(--body); overflow-x: clip;
+  }
+  .t :global(::selection) { background: var(--yellow); color: var(--ink); }
+  .t :global(a:focus-visible), .t :global(button:focus-visible), .t :global(summary:focus-visible) { outline: 3px solid var(--yellow); outline-offset: 3px; box-shadow: 0 0 0 6px var(--ink); border-radius: 2px; }
+  .t h1, .t h2, .t h3 { font-family: var(--cond); font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; margin: 0; text-wrap: balance; }
+  .t img { display: block; max-width: 100%; }
+
+  .quai-top { display: flex; align-items: center; gap: clamp(12px, 3vw, 32px); padding: 14px clamp(16px, 4vw, 48px); }
+  .brand img { width: 48px; height: auto; }
+  .station { margin: 0; font: 600 1rem/1 var(--cond); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }
+  .quai-top nav { margin-left: auto; display: flex; gap: 4px; }
+  .quai-top nav a { color: var(--ink); text-decoration: none; font: 600 1.1rem/1 var(--cond); letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 12px; border-radius: 3px; }
+  .quai-top nav a:hover { background: var(--ink); color: var(--yellow); }
+  .lang { font: 700 0.95rem/1 var(--cond); letter-spacing: 0.1em; background: var(--ink); color: var(--yellow); border: 0; padding: 9px 11px; border-radius: 3px; cursor: pointer; }
+
+  /* ---------- the board ---------- */
+  .board-wrap { padding: 0 clamp(8px, 3vw, 48px) clamp(32px, 5vw, 64px); }
+  .board { position: relative; background: var(--board); color: var(--flap); border-radius: 6px; padding: clamp(16px, 2.4vw, 32px) clamp(12px, 2.4vw, 36px) 0; border: 12px solid var(--alu); border-image: linear-gradient(180deg, #d4d8da, #8f9497 60%, #b7bcbf) 1; box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6), 0 2px 0 rgb(255 255 255 / 0.5); overflow: hidden; }
+  .b-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: clamp(12px, 2vw, 22px); border-bottom: 2px solid #2b2b2b; }
+  .b-head h1 { font-size: clamp(2.6rem, 6vw, 5.4rem); color: var(--flap); display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px; }
+  .b-head h1 small { font: 600 clamp(0.9rem, 1.4vw, 1.2rem)/1.1 var(--cond); letter-spacing: 0.1em; color: var(--yellow); }
+  .b-clock { margin: 0; }
+  .clock { font: 600 clamp(2.2rem, 4.6vw, 4rem)/1 var(--cond); font-variant-numeric: tabular-nums; color: var(--yellow); letter-spacing: 0.04em; }
+
+  .b-table { display: grid; }
+  .b-row { display: grid; grid-template-columns: 4.3em 11.6em minmax(0, 1fr) 6.6em 6.4em; gap: clamp(8px, 1.6vw, 22px); align-items: center; padding: clamp(10px, 1.4vw, 16px) 0; border-bottom: 1px solid #262626; font-size: clamp(0.95rem, 1.7vw, 1.55rem); overflow: hidden; }
+  .b-row > span { min-width: 0; overflow: hidden; }
+  .b-cols { font: 600 clamp(0.7rem, 0.9vw, 0.85rem)/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow); padding: 14px 0 8px; }
+  .b-row.is-now { background: linear-gradient(90deg, rgb(255 204 26 / 0.08), transparent 70%); }
+  .b-row.is-past { opacity: 0.45; }
+
+  :global(.flap) { display: inline-flex; gap: 2px; font-family: var(--cond); font-weight: 600; line-height: 1; white-space: nowrap; }
+  :global(.cell) { position: relative; display: inline-grid; place-items: center; width: 0.72em; height: 1.28em; background: var(--cell); color: var(--flap); border-radius: 2px; box-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.5), 0 1px 0 rgb(255 255 255 / 0.04); font-size: 1em; text-transform: uppercase; overflow: hidden; }
+  :global(.cell::after) { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgb(0 0 0 / 0.75); box-shadow: 0 1px 0 rgb(255 255 255 / 0.05); }
+  :global(.cell.flip) { animation: flip 0.07s ease-out; }
+  @keyframes flip { 0% { transform: perspective(240px) rotateX(-78deg); filter: brightness(0.55); } 100% { transform: none; filter: none; } }
+  :global(.flap.y .cell) { color: var(--yellow); }
+  .info { font: 700 clamp(0.72rem, 0.95vw, 0.98rem)/1.1 var(--cond); white-space: nowrap; letter-spacing: 0.1em; text-transform: uppercase; color: var(--flap); }
+  .b-row.is-now .info { color: var(--yellow); }
+  .b-row.is-now .info::before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); margin-right: 8px; animation: blink 1.4s steps(2, jump-none) infinite; }
+  @keyframes blink { 50% { opacity: 0.15; } }
+
+  .ticker { margin: 0 calc(-1 * clamp(12px, 2.4vw, 36px)); background: var(--yellow); color: var(--ink); overflow: hidden; display: flex; }
+  .ticker p { margin: 0; padding: 10px 0; white-space: nowrap; font: 700 clamp(0.95rem, 1.3vw, 1.15rem)/1 var(--cond); letter-spacing: 0.08em; text-transform: uppercase; display: flex; width: max-content; animation: tick 45s linear infinite; flex: none; }
+  .ticker p > span { padding-right: 3em; }
+  @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+  .next { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px 40px; padding: clamp(24px, 3vw, 40px) clamp(4px, 1vw, 12px) 0; }
+  .next-k { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 8px; font: 700 1rem/1 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; }
+  .next-k .dot { width: 12px; height: 12px; border-radius: 50%; background: #1f8a3b; }
+  .next-k[data-open='false'] .dot { background: var(--red); }
+  .next-h { margin: 0; font: 700 clamp(1.8rem, 3.6vw, 3.2rem)/1 var(--cond); text-transform: uppercase; max-width: 22ch; text-wrap: balance; }
+  .next-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 22px; border-radius: 4px; font: 700 1.2rem/1 var(--cond); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s; }
+  .btn svg { width: 22px; height: 22px; fill: currentColor; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgb(0 0 0 / 0.5); }
+  .btn.yellow { background: var(--yellow); color: var(--ink); }
+  .btn.dark { background: var(--ink); color: var(--flap); }
+
+  /* ---------- acces ---------- */
+  .acces { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); padding: clamp(56px, 8vw, 120px) clamp(16px, 4vw, 48px); align-items: start; }
+  .acces h2 { font-size: clamp(2.6rem, 6vw, 5rem); margin-bottom: 12px; }
+  .acces-copy > p { max-width: 50ch; color: var(--ink-2); }
+  .corr { list-style: none; margin: 24px 0 0; padding: 0; background: var(--board); color: var(--flap); border-radius: 4px; }
+  .corr li { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid #2c2c2c; font: 600 clamp(1.1rem, 1.8vw, 1.4rem)/1.1 var(--cond); text-transform: uppercase; letter-spacing: 0.04em; }
+  .corr li:last-child { border-bottom: 0; }
+  .corr svg { width: 26px; height: 26px; fill: var(--yellow); }
+  .corr b { font: 700 1.8rem/1 var(--cond); color: var(--yellow); font-variant-numeric: tabular-nums; }
+  .corr b small { font-size: 0.9rem; margin-left: 3px; letter-spacing: 0.06em; }
+  .fine { font-size: 0.82rem; color: var(--ink-2); }
+
+  .poster { margin: 0; background: var(--quai-2); padding: 12px; border: 8px solid var(--alu); border-image: linear-gradient(135deg, #e3e6e8, #8f9497 50%, #c9cdcf) 1; box-shadow: 0 18px 36px -18px rgb(0 0 0 / 0.5); }
+  .poster img { width: 100%; height: 100%; object-fit: cover; }
+  .poster.tall img { aspect-ratio: 4 / 5; }
+  .poster figcaption { padding: 12px 4px 2px; font: 700 1.3rem/1.1 var(--cond); text-transform: uppercase; letter-spacing: 0.03em; }
+
+  /* ---------- horaires (timetable sheet) ---------- */
+  .horaires { padding: clamp(56px, 8vw, 110px) clamp(16px, 4vw, 48px); background: var(--quai-2); }
+  .h-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px 40px; margin-bottom: 28px; }
+  .h-head h2 { font-size: clamp(2.4rem, 5.4vw, 4.6rem); max-width: 14ch; }
+  .h-head p { margin: 0; max-width: 46ch; color: var(--ink-2); }
+  .sheet { background: #fbfaf7; color: var(--ink); padding: clamp(18px, 3vw, 40px); border-top: 10px solid var(--ink); box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.45); columns: 3 280px; column-gap: clamp(20px, 3vw, 44px); column-rule: 1px solid #d9d6cf; }
+  .leg { break-inside: avoid; margin-bottom: 28px; }
+  .leg h3 { font-size: 1.5rem; padding: 6px 10px; background: var(--ink); color: var(--flap); display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .when { font: 600 0.85rem/1 var(--cond); letter-spacing: 0.08em; color: var(--yellow); }
+  .leg table { width: 100%; border-collapse: collapse; }
+  .leg th { text-align: left; font: 600 1.02rem/1.25 var(--body); padding: 9px 8px 9px 0; border-bottom: 1px solid #e3e0d9; vertical-align: top; }
+  .leg .d { display: block; font-weight: 400; font-size: 0.9rem; color: var(--ink-2); margin-top: 2px; }
+  .leg td.sym { width: 3.5em; text-align: right; font: 700 0.95rem/1.25 var(--cond); padding: 10px 0; border-bottom: 1px solid #e3e0d9; color: var(--red); vertical-align: top; white-space: nowrap; }
+  .legend { break-inside: avoid; border: 2px solid var(--ink); padding: 14px 16px; }
+  .legend p { margin: 0 0 6px; font-size: 0.95rem; }
+  .legend b { font-family: var(--cond); color: var(--red); display: inline-block; min-width: 1.6em; }
+
+  /* ---------- affiches ---------- */
+  .affiches { padding: clamp(56px, 8vw, 110px) clamp(16px, 4vw, 48px); }
+  .affiches h2 { font-size: clamp(2.4rem, 5vw, 4.2rem); margin-bottom: 28px; }
+  .wall { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: clamp(110px, 12vw, 180px); gap: clamp(10px, 1.6vw, 20px); }
+  .wall .p0 { grid-column: span 2; grid-row: span 3; } .wall .p1 { grid-column: span 2; grid-row: span 2; } .wall .p2 { grid-column: span 2; grid-row: span 2; }
+  .wall .p3 { grid-column: span 2; grid-row: span 2; } .wall .p4 { grid-column: span 2; grid-row: span 2; } .wall .p5 { grid-column: span 2; grid-row: span 1; }
+  .wall .poster { padding: 8px; border-width: 6px; }
+  .story { max-width: 64ch; margin-top: clamp(36px, 5vw, 64px); }
+  .story h3 { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 12px; }
+  .story p { color: var(--ink-2); }
+
+  /* ---------- satisfaction ---------- */
+  .satisf { background: var(--board); color: var(--flap); padding: clamp(56px, 8vw, 110px) clamp(16px, 4vw, 48px); }
+  .satisf h2 { font-size: clamp(2.4rem, 5vw, 4.2rem); color: var(--flap); margin-bottom: 28px; }
+  .sat-board { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .sat-board a { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; color: inherit; text-decoration: none; font-size: clamp(1.3rem, 3vw, 2.4rem); padding: 10px 0; border-bottom: 1px solid #2a2a2a; }
+  .sat-board a:hover .cnt { color: var(--yellow); }
+  .cnt { font: 600 1rem/1 var(--cond); letter-spacing: 0.1em; text-transform: uppercase; color: #a9a59c; }
+  .quotes { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .quotes blockquote { margin: 0 0 8px; font: 500 1.3rem/1.35 var(--body); }
+  .quotes a { color: var(--yellow); font-size: 0.85rem; }
+
+  /* ---------- faq ---------- */
+  .infos-v { padding: clamp(56px, 8vw, 110px) clamp(16px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: 28px clamp(32px, 6vw, 96px); }
+  .infos-v h2 { font-size: clamp(2.2rem, 4.4vw, 3.8rem); }
+  .faq details { border-bottom: 2px solid var(--ink); }
+  .faq summary { cursor: pointer; list-style: none; padding: 16px 36px 16px 0; font: 700 1.25rem/1.2 var(--cond); text-transform: uppercase; letter-spacing: 0.03em; position: relative; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: ''; position: absolute; right: 6px; top: 50%; width: 12px; height: 12px; border-right: 3px solid var(--ink); border-bottom: 3px solid var(--ink); transform: translateY(-70%) rotate(45deg); transition: transform 0.3s; }
+  .faq details[open] summary::after { transform: translateY(-20%) rotate(225deg); }
+  .faq details p { margin: 0 0 18px; color: var(--ink-2); max-width: 62ch; }
+
+  /* ---------- terminus ---------- */
+  .terminus { background: var(--board); color: var(--flap); padding: clamp(48px, 7vw, 96px) clamp(16px, 4vw, 48px) 90px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 32px clamp(32px, 6vw, 96px); align-items: center; border-top: 8px solid var(--yellow); }
+  .term-k { margin: 0 0 8px; font: 700 1rem/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow); }
+  :global(.big-flap) { font-size: clamp(3.4rem, 9vw, 7rem); }
+  .terminus dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 32px; margin: 0; }
+  .terminus dt { font: 700 0.8rem/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; color: #a9a59c; margin-bottom: 4px; }
+  .terminus dd { margin: 0; font: 600 1.15rem/1.35 var(--body); }
+  .terminus a { color: var(--yellow); text-underline-offset: 3px; }
+  .legal { grid-column: 1 / -1; margin: 0; font-size: 0.78rem; color: #8d8a83; }
+
+  @media (max-width: 900px) {
+    .col-quai { display: none; }
+    .b-row { grid-template-columns: 4.3em 11.6em minmax(0, 1fr) 6.4em; }
+    .acces, .infos-v, .terminus { grid-template-columns: 1fr; }
+    .wall { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 160px; }
+    .wall .poster { grid-column: span 1 !important; grid-row: span 1 !important; }
+    .wall .p0 { grid-row: span 2 !important; }
+  }
+  @media (max-width: 640px) {
+    .quai-top nav, .station { display: none; }
+    .lang { margin-left: auto; }
+    .col-menu { display: none; }
+    .b-row { grid-template-columns: 4.3em minmax(0, 1fr) 5.6em; font-size: clamp(0.85rem, 3.9vw, 1.1rem); }
+    .b-row .info { font-size: 0.72rem; }
+    .terminus dl { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { parisMinutes, isOpen, OPEN } from '../scripts/frensh';
+  const CHARS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:/,-·&\'’';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const toMin = (s: string) => { const [h, m] = s.split(':').map(Number); return h * 60 + (m || 0); };
+  const lang = () => (document.documentElement.dataset.lang === 'en' ? 'en' : 'fr');
+
+  function spin(flap: HTMLElement, delay = 0) {
+    if (reduce) return;
+    const cells = Array.from(flap.querySelectorAll<HTMLElement>('.cell'));
+    cells.forEach((cell, i) => {
+      if (cell.dataset.ch === undefined) cell.dataset.ch = cell.textContent === ' ' ? ' ' : (cell.textContent ?? ' ');
+      const target = cell.dataset.ch;
+      const run = (cell.dataset.run = String(Number(cell.dataset.run || 0) + 1));
+      let idx = 0;
+      const steps = 6 + Math.floor(Math.random() * 10) + (target === ' ' ? -4 : 0);
+      if (steps <= 0) return;
+      let n = 0;
+      const tick = () => {
+        if (cell.dataset.run !== run) return;
+        n++;
+        const ch = n >= steps ? target : CHARS[(idx = (idx + 1 + Math.floor(Math.random() * 3)) % CHARS.length)];
+        cell.textContent = ch === ' ' ? ' ' : ch;
+        cell.classList.remove('flip'); void cell.offsetWidth; cell.classList.add('flip');
+        if (n < steps) setTimeout(tick, 62);
+      };
+      setTimeout(tick, delay + i * 26);
+    });
+  }
+
+  // Board states
+  function states() {
+    const now = parisMinutes();
+    const en = lang() === 'en';
+    document.querySelectorAll<HTMLElement>('.b-row[data-from]').forEach((row) => {
+      const a = toMin(row.dataset.from!); const b = toMin(row.dataset.to!);
+      const info = row.querySelector<HTMLElement>('.info-t')!;
+      row.classList.remove('is-now', 'is-past');
+      let txt: string;
+      if (!isOpen(now)) txt = now < OPEN ? (en ? 'Today' : 'Aujourd’hui') : (en ? 'Tomorrow' : 'Demain');
+      else if (now >= a && now < b) { row.classList.add('is-now'); txt = en ? 'Now serving' : 'En cours'; }
+      else if (now >= b) { row.classList.add('is-past'); txt = en ? 'Departed' : 'Parti'; }
+      else txt = en ? 'On time' : 'À l’heure';
+      info.textContent = txt;
+    });
+  }
+  states(); setInterval(states, 60_000);
+  document.addEventListener('frensh:lang', () => {
+    states();
+    document.querySelectorAll<HTMLElement>(`[lang='${lang()}'] .flap`).forEach((f, i) => spin(f, i * 40));
+  });
+
+  // Initial spin of the board, then spin rating flaps when they scroll in
+  window.addEventListener('load', () => {
+    document.querySelectorAll<HTMLElement>('.board .flap').forEach((f, i) => { if (f.offsetParent) spin(f, 150 + (i % 5) * 90); });
+  });
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { spin(e.target as HTMLElement); io.unobserve(e.target); } }), { threshold: 0.6 });
+  document.querySelectorAll<HTMLElement>('.sat-board .flap, .terminus .flap').forEach((f) => io.observe(f));
+</script>

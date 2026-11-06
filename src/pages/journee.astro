@@ -1,0 +1,392 @@
+---
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/figtree';
+import Base from '../layouts/Base.astro';
+import T from '../components/T.astro';
+import { site, pitch, moments, menu, ratings, reviews, around, story, faq } from '../data/frensh';
+
+const m = Object.fromEntries(moments.map((x) => [x.id, x]));
+// The day, top to bottom. sky/ink are the light of that hour in Cannes.
+const stops = [
+  { id: 't0900', time: '09:00', sky: '#dfeaf1', ink: '#10233a', accent: '#c4161c' },
+  { id: 't1030', time: '10:30', sky: '#bcd9ec', ink: '#0f2236', accent: '#c4161c' },
+  { id: 't1200', time: '12:00', sky: '#1f6fb5', ink: '#ffffff', accent: '#ffd23f' },
+  { id: 't1500', time: '15:00', sky: '#5aa2d6', ink: '#0a1828', accent: '#ffffff' },
+  { id: 't1700', time: '17:00', sky: '#f3a35b', ink: '#2b1204', accent: '#8f0f14' },
+  { id: 't1930', time: '19:30', sky: '#7a3f6e', ink: '#fff4ea', accent: '#ffb35c' },
+  { id: 't2230', time: '22:30', sky: '#0e1430', ink: '#f4ede0', accent: '#ffc46b' },
+];
+const railHours = ['09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
+const salads = menu.flatMap((c) => c.items).filter((i) => /salade|burrata|burratina|césar|cesar|falafel|feta/i.test(i.name)).slice(0, 4);
+const google = ratings.find((r) => /google/i.test(r.source));
+---
+<Base title="FREnSH · Une journée à Cannes, de 9h à 22h30 · Brasserie rue Félix Faure" description={pitch.short} theme="#dfeaf1" current={3}>
+  <div class="j" data-stops={JSON.stringify(stops)}>
+    <header class="top">
+      <a href="#t0900" class="logo"><img src="/images/logo-frensh.png" alt="FREnSH" width="54" height="60" /></a>
+      <nav aria-label="Sections"><a href="#t1200"><T fr="La carte" en="Menu" /></a><a href="#t2230"><T fr="Venir" en="Visit" /></a></nav>
+      <button class="lang" type="button" data-lang-toggle>EN</button>
+    </header>
+
+    <!-- vertical day rail -->
+    <aside class="rail" aria-label="Aller à une heure de la journée">
+      <ol>
+        {railHours.map((h) => {
+          const target = stops.reduce((best, s) => (Number(s.time.slice(0, 2)) <= Number(h) ? s : best), stops[0]);
+          return <li><a href={`#${target.id}`} style={`--p:${(Number(h) - 9) / 13.5}`}>{h}h</a></li>;
+        })}
+      </ol>
+      <span class="rail-now" title="Maintenant / now" aria-hidden="true"></span>
+      <span class="rail-here" aria-hidden="true"><span class="rail-here-t">09:00</span></span>
+    </aside>
+
+    <svg class="sun" viewBox="0 0 160 84" aria-hidden="true"><path d="M8 80 A72 72 0 0 1 152 80" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 5" opacity=".5"/><circle class="sun-dot" cx="8" cy="80" r="9"/></svg>
+
+    <main>
+      <section id="t0900" class="stop hero" data-time="09:00">
+        <div class="hero-copy">
+          <p class="clock-big" aria-hidden="true">09:00</p>
+          <h1><T fr={pitch.headline} en={pitch.headlineEn} /></h1>
+          <p class="lede"><T fr={pitch.short} en={pitch.shortEn} /></p>
+          <p class="hero-meta"><span data-status><span class="dot" aria-hidden="true"></span><span data-status-text>Ouvert · jusqu’à 22h30</span></span> · {site.address.street}</p>
+        </div>
+        <figure class="hero-photo">
+          <img src="/images/petit-dej-terrasse.jpg" alt="Croissant, confiture, jus d’orange pressé et café sur une table de la terrasse au soleil" />
+          <figcaption><T fr={m.matin?.line ?? ''} en={m.matin?.lineEn ?? ''} /></figcaption>
+        </figure>
+      </section>
+
+      <section id="t1030" class="stop split" data-time="10:30">
+        <p class="time" aria-hidden="true">10:30</p>
+        <div class="split-copy">
+          <h2><T fr={m.matin?.title ?? 'Le matin'} en={m.matin?.titleEn ?? 'Morning'} /></h2>
+          <p><T fr={m.matin?.text ?? ''} en={m.matin?.textEn ?? ''} /></p>
+          {m.matin && <ul class="items">{m.matin.items.map((i) => <li>{i}</li>)}</ul>}
+        </div>
+        <img class="split-img" src="/images/cartes-terrasse.jpg" alt="Cartes du FREnSH posées sur une table de la terrasse, avec la place en arrière-plan" loading="lazy" />
+      </section>
+
+      <section id="t1200" class="stop midi" data-time="12:00">
+        <p class="time" aria-hidden="true">12:00</p>
+        <h2><T fr={m.midi?.title ?? 'Midi'} en={m.midi?.titleEn ?? 'Lunch'} /></h2>
+        <p class="midi-line"><T fr={m.midi?.text ?? ''} en={m.midi?.textEn ?? ''} /></p>
+        <div class="plates">
+          <figure><img src="/images/salade-cesar.jpg" alt="Salade César au poulet et sucrine" loading="lazy" /><figcaption>{salads[0]?.name ?? 'Salade César'}</figcaption></figure>
+          <figure><img src="/images/salade-falafels.jpg" alt="Salade aux falafels, avocat et légumes croquants" loading="lazy" /><figcaption>{salads[1]?.name ?? 'Salade falafels'}</figcaption></figure>
+          <figure><img src="/images/plat-souris-agneau.jpg" alt="Plat du jour : souris d’agneau et purée" loading="lazy" /><figcaption><T fr="Le plat du jour" en="Today’s special" /></figcaption></figure>
+          <figure><img src="/images/salade-feta-pasteque.jpg" alt="Salade feta, pastèque et olives" loading="lazy" /><figcaption>{salads[3]?.name ?? 'Feta & pastèque'}</figcaption></figure>
+        </div>
+      </section>
+
+      <section id="t1500" class="stop pause" data-time="15:00">
+        <p class="time" aria-hidden="true">15:00</p>
+        <div class="pause-grid">
+          <div>
+            <h2><T fr={story.title} en={story.titleEn} /></h2>
+            {story.paragraphs.slice(0, 2).map((p, i) => <p><T fr={p} en={story.paragraphsEn[i]} /></p>)}
+            <ul class="around">{around.map((a) => <li><b>{a.minutes} min</b><T fr={a.place} en={a.placeEn} /></li>)}</ul>
+            <p class="fine"><T fr="À pied, temps approximatifs." en="On foot, approximate times." /></p>
+          </div>
+          <figure class="pause-photo">
+            <img src="/images/rue-felix-faure.jpg" alt="La rue Félix Faure, côté piéton, sous le ciel bleu" loading="lazy" />
+            <figcaption><T fr="La rue Félix Faure, côté piéton. Photo : Benoît Prieur, CC0" en="Rue Félix Faure, the pedestrian side. Photo: Benoît Prieur, CC0" /></figcaption>
+          </figure>
+          <figure class="pause-small"><img src="/images/cafe-gourmand.jpg" alt="Café gourmand : pain perdu, crème, mousse et expresso" loading="lazy" /></figure>
+        </div>
+      </section>
+
+      <section id="t1700" class="stop apero" data-time="17:00">
+        <p class="time" aria-hidden="true">17:00</p>
+        <div class="apero-grid">
+          <img class="a1" src="/images/mur-rose-provence.jpg" alt="Mur de vins rosés AOP Provence, ardoises « le verre » et « la bouteille »" loading="lazy" />
+          <img class="a2" src="/images/cocktail-terrasse.jpg" alt="Cocktail rouge à la menthe en terrasse" loading="lazy" />
+          <img class="a3" src="/images/apero-biere-vin.jpg" alt="Bière pression, verre de vin blanc et planche de fromage en terrasse" loading="lazy" />
+          <div class="apero-copy">
+            <h2><T fr={m.apero?.title ?? 'Happy hour'} en={m.apero?.titleEn ?? 'Happy hour'} /></h2>
+            <p class="hh">17h – 20h</p>
+            <p><T fr={m.apero?.text ?? ''} en={m.apero?.textEn ?? ''} /></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="t1930" class="stop soir" data-time="19:30">
+        <p class="time" aria-hidden="true">19:30</p>
+        <div class="soir-head">
+          <h2><T fr="La carte, en entier" en="The whole menu" /></h2>
+          <p><T fr={m.soir?.text ?? ''} en={m.soir?.textEn ?? ''} /></p>
+          <p class="fine"><T fr="Prix affichés sur place · plat du jour à l’ardoise" en="Prices displayed on site · daily special on the board" /></p>
+        </div>
+        <div class="menu">
+          {menu.map((cat) => (
+            <section aria-labelledby={`j-${cat.id}`}>
+              <h3 id={`j-${cat.id}`}><T fr={cat.title} en={cat.titleEn} /></h3>
+              <ul>
+                {cat.items.map((it) => (
+                  <li><span class="n"><T fr={it.name} en={it.nameEn} />{it.tags.includes('signature') && <em><T fr="signature" en="signature" /></em>}</span>{it.desc && <span class="d"><T fr={it.desc} en={it.descEn} /></span>}</li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+        <p class="deliver"><T fr="Ce soir, à la maison ?" en="Staying in tonight?" /> <a href={site.delivery.url} target="_blank" rel="noopener"><T fr="Commander sur Deliveroo" en="Order on Deliveroo" /></a></p>
+      </section>
+
+      <section id="t2230" class="stop nuit" data-time="22:30">
+        <p class="time" aria-hidden="true">22:30</p>
+        <div class="nuit-hero">
+          <img src="/images/kiosque-allees-nuit.jpg" alt="Le kiosque à musique des Allées de la Liberté illuminé la nuit" loading="lazy" />
+          <div class="nuit-card">
+            <h2><T fr="À demain, 9h." en="See you tomorrow, 9 am." /></h2>
+            <p class="addr">{site.address.street}<br />{site.address.zip} {site.address.city}</p>
+            <p><T fr={site.hours.days} en={site.hours.daysEn} /> · 9h – 22h30</p>
+            <div class="nuit-cta">
+              <a class="btn" href={site.address.mapsUrl} target="_blank" rel="noopener"><T fr="Itinéraire" en="Directions" /></a>
+              <a class="btn ghost" href={site.phoneHref}>{site.phone}</a>
+            </div>
+            <p class="credit">Photo : miketnorton, CC BY 2.0</p>
+          </div>
+        </div>
+        <div class="nuit-grid">
+          <div class="avis">
+            <h3><T fr="Les avis" en="Reviews" /></h3>
+            <ul class="scores">{ratings.map((r) => <li><a href={r.url} target="_blank" rel="noopener"><b>{String(r.score).replace('.', ',')}</b><span>{r.source}<br />{r.count} <T fr="avis" en="reviews" /></span></a></li>)}</ul>
+            {reviews.slice(0, 2).map((r) => <blockquote lang={r.lang}>« {r.quote} » <cite><a href={r.url} target="_blank" rel="noopener">{r.source}</a></cite></blockquote>)}
+          </div>
+          <div class="faq">
+            <h3><T fr="Bon à savoir" en="Good to know" /></h3>
+            {faq.map((f) => <details><summary><T fr={f.q} en={f.qEn} /></summary><p><T fr={f.a} en={f.aEn} /></p></details>)}
+          </div>
+        </div>
+        <footer class="foot">
+          <p>© FREnSH · <a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a> · <a href={site.social.facebook} target="_blank" rel="noopener">Facebook</a></p>
+          <p><T fr="Photos du quartier : Wikimedia Commons, crédits sur chaque image." en="Area photos: Wikimedia Commons, credits on each image." /></p>
+        </footer>
+      </section>
+    </main>
+
+    <div class="bar" role="region" aria-label="Venir au FREnSH">
+      <p data-status><span class="dot" aria-hidden="true"></span><span data-status-text>Ouvert · jusqu’à 22h30</span></p>
+      <a class="bar-go" href={site.address.mapsUrl} target="_blank" rel="noopener"><T fr="Itinéraire" en="Directions" /></a>
+      <a class="bar-call" href={site.phoneHref} aria-label={`Appeler le ${site.phone}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg></a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .j {
+    --sky: #dfeaf1; --ink: #10233a; --accent: #c4161c;
+    --disp: 'Bricolage Grotesque Variable', system-ui, sans-serif; --body: 'Figtree Variable', system-ui, sans-serif;
+    --rail: clamp(0px, 7vw, 96px);
+    background: var(--sky); color: var(--ink); font: 400 1.0625rem/1.6 var(--body); overflow-x: clip;
+  }
+  .j :global(::selection) { background: var(--ink); color: var(--sky); }
+  .j :global(a:focus-visible), .j :global(button:focus-visible), .j :global(summary:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  .j h1, .j h2, .j h3 { font-family: var(--disp); font-weight: 700; letter-spacing: -0.03em; line-height: 0.98; margin: 0; text-wrap: balance; font-variation-settings: 'wdth' 90; }
+  .j img { display: block; max-width: 100%; }
+  .fine, .credit { font-size: 0.8rem; opacity: 0.75; }
+
+  .top { position: fixed; inset: 0 0 auto 0; z-index: 30; display: flex; align-items: center; gap: 16px; padding: 14px clamp(16px, 3vw, 40px) 14px calc(var(--rail) + clamp(16px, 2vw, 28px)); pointer-events: none; }
+  .top > * { pointer-events: auto; }
+  .logo img { width: 50px; height: auto; filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.2)); }
+  .top nav { margin-left: auto; display: flex; gap: 4px; }
+  .top nav a, .lang { color: var(--ink); text-decoration: none; font: 600 0.95rem/1 var(--body); padding: 10px 14px; border-radius: 999px; background: color-mix(in oklab, var(--sky) 70%, transparent); backdrop-filter: blur(8px); border: 0; cursor: pointer; }
+  .top nav a:hover, .lang:hover { background: var(--ink); color: var(--sky); }
+
+  /* rail */
+  .rail { position: fixed; left: 0; top: 0; bottom: 0; width: var(--rail); z-index: 25; border-right: 1px solid color-mix(in oklab, var(--ink) 22%, transparent); }
+  .rail ol { list-style: none; margin: 0; padding: 0; position: absolute; inset: 90px 0 110px 0; }
+  .rail li a { position: absolute; top: calc(var(--p) * 100%); right: 12px; transform: translateY(-50%); font: 600 0.78rem/1 var(--disp); font-variant-numeric: tabular-nums; color: var(--ink); opacity: 0.55; text-decoration: none; padding: 4px 6px; }
+  .rail li a::after { content: ''; position: absolute; right: -12px; top: 50%; width: 8px; height: 1px; background: currentColor; }
+  .rail li a:hover { opacity: 1; }
+  .rail-here, .rail-now { position: absolute; right: -1px; top: calc(90px + var(--here, 0) * (100% - 200px)); transform: translateY(-50%); }
+  .rail-here { width: 3px; height: 34px; background: var(--accent); }
+  .rail-here-t { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font: 700 0.85rem/1 var(--disp); font-variant-numeric: tabular-nums; background: var(--accent); color: var(--sky); padding: 5px 7px; border-radius: 4px; white-space: nowrap; }
+  .rail-now { --here: var(--now, 0); right: -6px; width: 11px; height: 11px; border-radius: 50%; background: #2fa34a; box-shadow: 0 0 0 4px rgb(47 163 74 / 0.25); }
+  .j:not([data-now-visible]) .rail-now { display: none; }
+
+  .sun { position: fixed; right: clamp(16px, 3vw, 40px); top: 74px; width: clamp(90px, 10vw, 150px); z-index: 20; color: var(--ink); pointer-events: none; }
+  .sun-dot { fill: var(--accent); }
+
+  main { padding-left: var(--rail); }
+  .stop { position: relative; padding: clamp(96px, 12vw, 160px) clamp(16px, 5vw, 80px) clamp(64px, 8vw, 120px); min-height: 90vh; }
+  .time { position: relative; text-align: right; margin: 0 0 -0.3em; font: 800 clamp(3.6rem, 12vw, 9.5rem)/0.8 var(--disp); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; opacity: 0.16; pointer-events: none; }
+
+  /* 09:00 hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: end; min-height: 100svh; padding-top: clamp(90px, 10vw, 120px); }
+  .clock-big { margin: 0 0 16px; font: 800 clamp(4rem, 11vw, 9.5rem)/0.8 var(--disp); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; color: var(--accent); }
+  .hero h1 { font-size: clamp(2.2rem, 4.2vw, 3.9rem); max-width: 15ch; }
+  .lede { max-width: 44ch; font-size: clamp(1.05rem, 1.3vw, 1.25rem); margin: 18px 0; }
+  .hero-meta { font-weight: 600; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+  [data-status] { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-weight: 600; }
+  [data-status] .dot { width: 9px; height: 9px; border-radius: 50%; background: #2fa34a; box-shadow: 0 0 0 3px rgb(47 163 74 / 0.25); }
+  [data-status][data-open='false'] .dot { background: #d33; box-shadow: 0 0 0 3px rgb(221 51 51 / 0.25); }
+  .hero-photo { margin: 0; align-self: stretch; display: flex; flex-direction: column; justify-content: end; }
+  .hero-photo img { width: 100%; max-height: 74svh; object-fit: cover; border-radius: 22px 22px 22px 4px; box-shadow: 0 30px 60px -30px rgb(16 35 58 / 0.55); }
+  .hero-photo figcaption { margin-top: 10px; font-size: 0.9rem; opacity: 0.8; }
+
+  /* 10:30 */
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); gap: clamp(24px, 5vw, 80px); align-items: center; }
+  .split h2, .midi h2, .pause h2, .apero h2, .soir h2 { font-size: clamp(2.4rem, 5.6vw, 5rem); margin-bottom: 18px; }
+  .split-copy p { max-width: 52ch; }
+  .items { list-style: none; padding: 0; margin: 20px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .items li { padding: 8px 14px; border-radius: 999px; background: color-mix(in oklab, var(--ink) 9%, transparent); font-weight: 600; font-size: 0.95rem; }
+  .split-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px 22px 22px 22px; }
+
+  /* 12:00 */
+  .midi-line { max-width: 56ch; font-size: 1.15rem; margin: 0 0 clamp(28px, 4vw, 48px); }
+  .plates { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.6vw, 22px); align-items: start; }
+  .plates figure { margin: 0; }
+  .plates figure:nth-child(2) { margin-top: clamp(24px, 5vw, 80px); } .plates figure:nth-child(4) { margin-top: clamp(16px, 3vw, 48px); }
+  .plates img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; }
+  .plates figcaption { margin-top: 10px; font: 700 1.1rem/1.2 var(--disp); }
+
+  /* 15:00 */
+  .pause-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); grid-template-rows: auto auto; gap: clamp(20px, 3vw, 40px) clamp(24px, 5vw, 72px); }
+  .pause-grid > div { grid-row: span 2; }
+  .pause-grid p { max-width: 54ch; }
+  .around { list-style: none; padding: 0; margin: 24px 0 6px; }
+  .around li { display: flex; align-items: baseline; gap: 16px; padding: 10px 0; border-top: 1px solid color-mix(in oklab, var(--ink) 25%, transparent); font-weight: 500; }
+  .around b { font: 700 1.4rem/1 var(--disp); font-variant-numeric: tabular-nums; min-width: 4.2ch; }
+  .pause-photo { margin: 0; }
+  .pause-photo img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; border-radius: 22px 4px 22px 22px; }
+  .pause-photo figcaption { font-size: 0.8rem; opacity: 0.8; margin-top: 8px; }
+  .pause-small { margin: 0; justify-self: end; width: 55%; }
+  .pause-small img { aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; }
+
+  /* 17:00 */
+  .apero-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(10px, 1.6vw, 22px); align-items: end; }
+  .apero-grid img { width: 100%; object-fit: cover; border-radius: 18px; }
+  .a1 { grid-column: 1 / span 4; aspect-ratio: 4 / 5; } .a2 { grid-column: 5 / span 3; aspect-ratio: 3 / 4; margin-bottom: 15%; } .a3 { grid-column: 8 / span 5; aspect-ratio: 4 / 3; }
+  .apero-copy { grid-column: 2 / span 8; padding-top: clamp(20px, 3vw, 40px); }
+  .hh { margin: -6px 0 12px; font: 800 clamp(2.6rem, 6vw, 5rem)/1 var(--disp); letter-spacing: -0.03em; color: var(--accent); }
+  .apero-copy p:last-child { max-width: 56ch; font-size: 1.1rem; }
+
+  /* 19:30 */
+  .soir-head { max-width: 62ch; margin-bottom: clamp(28px, 4vw, 48px); }
+  .menu { columns: 3 280px; column-gap: clamp(24px, 4vw, 56px); }
+  .menu section { break-inside: avoid; margin-bottom: 32px; }
+  .menu h3 { font-size: 1.6rem; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 2px solid var(--accent); }
+  .menu ul { list-style: none; padding: 0; margin: 0; }
+  .menu li { padding: 10px 0; border-bottom: 1px solid color-mix(in oklab, var(--ink) 18%, transparent); }
+  .menu .n { display: block; font-weight: 700; font-size: 1.08rem; }
+  .menu em { font-style: normal; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: #2b1204; border-radius: 999px; padding: 3px 8px; margin-left: 8px; vertical-align: 2px; }
+  .menu .d { display: block; font-size: 0.93rem; opacity: 0.82; }
+  .deliver { margin-top: 12px; font-weight: 600; }
+  .deliver a { color: var(--accent); text-underline-offset: 4px; }
+
+  /* 22:30 */
+  .nuit { padding-bottom: 120px; }
+  .nuit-hero { position: relative; display: grid; border-radius: 26px; overflow: hidden; margin-top: clamp(20px, 3vw, 40px); }
+  .nuit-hero img { grid-area: 1 / 1; width: 100%; height: clamp(420px, 70vh, 720px); object-fit: cover; }
+  .nuit-card { grid-area: 1 / 1; align-self: end; justify-self: start; margin: clamp(16px, 3vw, 40px); padding: clamp(20px, 3vw, 36px); color: #f4ede0; --ink: #f4ede0; --accent: #ffc46b; background: rgb(14 20 48 / 0.84); backdrop-filter: blur(10px); border-radius: 20px; max-width: 460px; }
+  .nuit-card h2 { font-size: clamp(2.4rem, 5vw, 4.2rem); color: var(--accent); margin-bottom: 14px; }
+  .addr { font: 700 1.4rem/1.25 var(--disp); margin: 0 0 6px; }
+  .nuit-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .btn { display: inline-flex; align-items: center; min-height: 50px; padding: 0 22px; border-radius: 999px; background: var(--accent); color: #0e1430; font-weight: 700; text-decoration: none; transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--ink) 60%, transparent); }
+  .nuit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); margin-top: clamp(56px, 8vw, 110px); }
+  .nuit-grid h3 { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 18px; }
+  .scores { list-style: none; padding: 0; margin: 0 0 24px; display: flex; flex-wrap: wrap; gap: 24px; }
+  .scores a { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; }
+  .scores b { font: 800 3.4rem/1 var(--disp); letter-spacing: -0.03em; color: var(--accent); }
+  .scores span { font-size: 0.85rem; line-height: 1.3; opacity: 0.85; }
+  .avis blockquote { margin: 0 0 16px; font: 600 1.2rem/1.4 var(--disp); }
+  .avis cite { display: block; font: 400 0.8rem/1.4 var(--body); margin-top: 4px; }
+  .avis cite a, .foot a { color: inherit; }
+  .faq details { border-top: 1px solid color-mix(in oklab, var(--ink) 25%, transparent); }
+  .faq summary { cursor: pointer; list-style: none; padding: 14px 30px 14px 0; font-weight: 700; position: relative; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; position: absolute; right: 4px; top: 10px; font: 700 1.4rem/1 var(--disp); color: var(--accent); transition: rotate 0.3s; }
+  .faq details[open] summary::after { rotate: 45deg; }
+  .faq details p { margin: 0 0 16px; opacity: 0.85; max-width: 60ch; }
+  .foot { margin-top: clamp(56px, 8vw, 100px); padding-top: 20px; border-top: 1px solid color-mix(in oklab, var(--ink) 25%, transparent); font-size: 0.82rem; opacity: 0.8; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+  .foot p { margin: 0; }
+
+  /* sticky action bar */
+  .bar { position: fixed; right: clamp(12px, 3vw, 32px); bottom: clamp(12px, 3vw, 28px); z-index: 40; display: flex; align-items: center; gap: 6px; padding: 6px 6px 6px 18px; border-radius: 999px; background: var(--ink); color: var(--sky); box-shadow: 0 16px 40px -14px rgb(0 0 0 / 0.5); transition: background 0.4s, color 0.4s; }
+  .bar [data-status] { font-size: 0.92rem; margin-right: 8px; }
+  .bar-go { min-height: 46px; display: inline-flex; align-items: center; padding: 0 20px; border-radius: 999px; background: var(--accent); color: var(--ink); font-weight: 700; text-decoration: none; }
+  .bar-call { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in oklab, var(--sky) 18%, transparent); color: var(--sky); }
+  .bar-call svg { width: 20px; height: 20px; fill: currentColor; }
+
+  @media (max-width: 900px) {
+    .j { --rail: 0px; }
+    .rail { display: none; }
+    .hero, .split, .pause-grid, .nuit-grid { grid-template-columns: 1fr; }
+    .hero { min-height: 0; padding-top: 96px; }
+    .hero-photo img { max-height: 60svh; }
+    .plates { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .apero-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .a1 { grid-column: 1 / span 3; } .a2 { grid-column: 4 / span 3; margin-bottom: 0; } .a3 { grid-column: 1 / -1; }
+    .apero-copy { grid-column: 1 / -1; }
+    .pause-small { display: none; }
+    .stop { min-height: 0; }
+    .sun { top: 70px; width: 80px; opacity: 0.8; }
+  }
+  @media (max-width: 640px) {
+    .top nav { display: none; }
+    .lang { margin-left: auto; }
+    .bar { left: 10px; right: 10px; bottom: 56px; justify-content: space-between; }
+    .bar [data-status] { font-size: 0.82rem; }
+    .sun { display: none; }
+  }
+</style>
+
+<script>
+  import { parisMinutes, OPEN, CLOSE, fmt } from '../scripts/frensh';
+  const root = document.querySelector<HTMLElement>('.j')!;
+  type Stop = { id: string; time: string; sky: string; ink: string; accent: string };
+  const stops: Stop[] = JSON.parse(root.dataset.stops!);
+  const secs = stops.map((s) => document.getElementById(s.id)!);
+  const toMin = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+  const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a: string, b: string, t: number) => { const A = hex(a), B = hex(b); return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(' ')})`; };
+  const lum = (h: string) => { const [r, g, b] = hex(h).map((v) => v / 255); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const ease = (t: number) => t * t * (3 - 2 * t);
+  const here = root.querySelector<HTMLElement>('.rail-here')!;
+  const hereT = root.querySelector<HTMLElement>('.rail-here-t')!;
+  const sun = root.querySelector<SVGCircleElement>('.sun-dot')!;
+  const theme = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  const span = CLOSE - OPEN;
+
+  let ticking = false;
+  function frame() {
+    ticking = false;
+    const probe = innerHeight * 0.45;
+    let i = 0;
+    for (let k = 0; k < secs.length; k++) if (secs[k].getBoundingClientRect().top <= probe) i = k;
+    const r = secs[i].getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (probe - r.top) / r.height));
+    const a = stops[i], b = stops[Math.min(i + 1, stops.length - 1)];
+    // hold the hour's light for most of the section, then cross-fade into the next hour
+    const t = ease(Math.max(0, (p - 0.55) / 0.45));
+    const useB = t > 0.5;
+    root.style.setProperty('--sky', mix(a.sky, b.sky, t));
+    const inkSrc = useB ? b : a;
+    root.style.setProperty('--ink', inkSrc.ink);
+    root.style.setProperty('--accent', inkSrc.accent);
+    if (theme) theme.content = useB ? b.sky : a.sky;
+    // time readout follows the scroll
+    const minutes = Math.round(toMin(a.time) + (toMin(b.time) - toMin(a.time)) * p);
+    const f = Math.min(1, Math.max(0, (minutes - OPEN) / span));
+    here.style.setProperty('--here', String(f));
+    hereT.textContent = fmt(Math.round(minutes / 5) * 5);
+    // sun along its arc, sinking into a warm lamp at night
+    const ang = Math.PI * (1 - f);
+    sun.setAttribute('cx', String(80 + 72 * Math.cos(ang)));
+    sun.setAttribute('cy', String(80 - 72 * Math.sin(ang)));
+    void lum;
+  }
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
+  addEventListener('resize', frame);
+  frame();
+
+  // real "now" on the rail
+  const nowTick = () => {
+    const n = parisMinutes();
+    if (n >= OPEN && n < CLOSE) { root.dataset.nowVisible = ''; root.style.setProperty('--now', String((n - OPEN) / span)); }
+    else delete root.dataset.nowVisible;
+  };
+  nowTick(); setInterval(nowTick, 60_000);
+</script>

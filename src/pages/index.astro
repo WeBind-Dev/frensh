@@ -1,0 +1,466 @@
+---
+import '@fontsource/young-serif/400.css';
+import '@fontsource/kalam/400.css';
+import '@fontsource/kalam/700.css';
+import '@fontsource-variable/commissioner/wght.css';
+import Base from '../layouts/Base.astro';
+import T from '../components/T.astro';
+import Logo from '../components/Logo.astro';
+import { site, pitch, moments, menu, ratings, reviews, around, story, faq } from '../data/frensh';
+
+const crates = [
+  { photo: '/images/petit-dej-terrasse.jpg', fr: 'Croissant, jus pressé', en: 'Croissant, fresh juice', tag: 'dès 9h', tagEn: 'from 9 am', alt: 'Croissant, jus d’orange pressé et café sur la terrasse au soleil', stamp: 'CAT. MATIN' },
+  { photo: '/images/burrata.jpg', fr: 'Burrata, tomates', en: 'Burrata, tomatoes', tag: 'le midi', tagEn: 'lunch', alt: 'Burrata au pesto entourée de tomates cerises et olives noires', stamp: 'CAT. EXTRA' },
+  { photo: '/images/cocktail-terrasse.jpg', fr: 'Spritz en terrasse', en: 'Spritz on the terrace', tag: '17h–20h', tagEn: '5–8 pm', alt: 'Cocktail rouge à la menthe sur une table en marbre noir de la terrasse', stamp: 'ORIG. CANNES' },
+];
+const google = ratings.find((r) => /google/i.test(r.source));
+const others = ratings.filter((r) => r !== google);
+/** Typographie française : espace fine insécable avant ? ! : ; » et après «, pour qu'aucun signe ne tombe seul à la ligne. */
+const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g, '«\u202f');
+---
+<Base title="Frensh · Brasserie fresh & french à Cannes · 43 bis rue Félix Faure" description={pitch.short} theme="#36452c" current={1}>
+  <div class="m">
+    <header class="top">
+      <a href="#" class="logo" aria-label="Frensh, accueil"><Logo /></a>
+      <nav aria-label="Sections">
+        <a href="#carte" class="pick"><T fr="La carte" en="Menu" /></a>
+        <a href="#quartier" class="pick"><T fr="Le quartier" en="Area" /></a>
+        <a href="#infos" class="pick"><T fr="Infos" en="Info" /></a>
+      </nav>
+      <div class="top-r">
+        <p class="status" data-status><span class="dot" aria-hidden="true"></span><span data-status-text>Ouvert · jusqu’à 22h30</span></p>
+        <button class="lang" type="button" data-lang-toggle>EN</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- L'ÉTAL : first viewport -->
+      <section class="etal" aria-labelledby="h1">
+        <div class="etal-copy">
+          <h1 id="h1"><T fr={fine(pitch.headline)} en={pitch.headlineEn} /></h1>
+          <p class="lede"><T fr={fine(pitch.short)} en={pitch.shortEn} /></p>
+        </div>
+
+        <div class="ardoise big" role="group" aria-label="Horaires et adresse">
+          <p class="a-k"><T fr="Aujourd’hui" en="Today" /></p>
+          <p class="a-hours">9h <span aria-hidden="true">–</span><span class="sr-only">à</span> 22h30</p>
+          <p class="a-addr"><span class="a-street">{site.address.street}</span><span class="a-near"><T fr={fine(site.address.landmark)} en={site.address.landmarkEn} /></span></p>
+          <div class="a-cta">
+            <a class="btn solid" href={site.address.mapsUrl} target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg><T fr="Itinéraire" en="Directions" /></a>
+            <a class="btn chalk" href={site.phoneHref}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg>{site.phone}</a>
+          </div>
+        </div>
+        <span class="stick" aria-hidden="true"></span>
+
+        <ul class="crates" aria-label="Sur l’étal aujourd’hui">
+          {crates.map((c, i) => (
+            <li class={`crate c${i}`}>
+              <div class="crate-box">
+                <img src={c.photo} alt={c.alt} loading={i ? 'lazy' : 'eager'} />
+                <span class="slat" aria-hidden="true"><span>FRENSH · {c.stamp}</span></span>
+              </div>
+              <p class="tag"><span class="tag-t"><T fr={fine(c.tag)} en={c.tagEn} /></span><span class="tag-n"><T fr={fine(c.fr)} en={c.en} /></span></p>
+            </li>
+          ))}
+        </ul>
+        <div class="nappe" aria-hidden="true"><span>Fresh &amp; French Food · Great Coffee &amp; Juices · Fresh &amp; French Food · Great Coffee &amp; Juices · Fresh &amp; French Food · Great Coffee &amp; Juices ·</span></div>
+      </section>
+
+      <!-- LE MARCHÉ D'À CÔTÉ -->
+      <section class="story" aria-labelledby="h-story">
+        <figure class="story-photo">
+          <img src="/images/marche-forville-fruits.jpg" alt="Étals de fruits et légumes du Marché Forville, à Cannes" loading="lazy" />
+          <figcaption><T fr="Le Marché Forville, à quelques rues. Photo : Iswoar, CC BY-SA 4.0" en="Marché Forville, a few streets away. Photo: Iswoar, CC BY-SA 4.0" /></figcaption>
+        </figure>
+        <div class="story-copy">
+          <h2 id="h-story"><T fr={fine(story.title)} en={story.titleEn} /></h2>
+          {story.paragraphs.map((p, i) => <p><T fr={fine(p)} en={story.paragraphsEn[i]} /></p>)}
+          <figure class="chef">
+            <img src="/images/chef-cuisine.jpg" alt="Le chef dans la cuisine du Frensh" loading="lazy" />
+            <figcaption class="tag small"><span class="tag-n"><T fr="Tout est préparé ici" en="Everything’s made here" /></span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- LES HEURES DE L'ÉTAL -->
+      <section class="hours" aria-labelledby="h-hours">
+        <h2 id="h-hours"><T fr="Du café du matin au dernier verre" en="From morning coffee to the last glass" /></h2>
+        <ol class="moments">
+          {moments.map((m) => (
+            <li class="moment" data-from={m.from} data-to={m.to}>
+              <img src={m.photo} alt="" loading="lazy" />
+              <div class="moment-label">
+                <p class="m-time">{m.from.replace(/^0/, '').replace(':00', 'h').replace(':', 'h')} – {m.to.replace(/^0/, '').replace(':00', 'h').replace(':', 'h')}</p>
+                <h3><T fr={fine(m.title)} en={m.titleEn} /></h3>
+                <p><T fr={fine(m.line)} en={m.lineEn} /></p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <!-- LA CARTE -->
+      <section class="carte" id="carte" aria-labelledby="h-carte">
+        <div class="carte-head">
+          <h2 id="h-carte"><T fr="La carte" en="The menu" /></h2>
+          <p><T fr="Les prix sont à l’ardoise, sur place. La carte bouge avec le marché : demandez le plat du jour." en="Prices are on the board, on site. The menu follows the market: ask for today’s special." /></p>
+        </div>
+        <div class="stalls">
+          {menu.map((cat) => (
+            <section class="stall" aria-labelledby={`cat-${cat.id}`}>
+              <h3 id={`cat-${cat.id}`} class="stall-sign"><T fr={fine(cat.title)} en={cat.titleEn} /></h3>
+              {cat.note && <p class="stall-note">{cat.note}</p>}
+              <ul>
+                {cat.items.map((it) => (
+                  <li>
+                    <p class="it-n"><T fr={fine(it.name)} en={it.nameEn} />{it.tags.includes('signature') && <span class="star"><T fr="la signature" en="signature" /></span>}</p>
+                    {it.desc && <p class="it-d"><T fr={fine(it.desc)} en={it.descEn} /></p>}
+                    {it.tags.filter((t) => t !== 'signature').length > 0 && <p class="it-t">{it.tags.filter((t) => t !== 'signature').join(' · ')}</p>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+        <div class="deliver">
+          <p><T fr="Pas le temps de s’asseoir ? On livre avec Deliveroo." en="No time to sit down? We deliver with Deliveroo." /></p>
+          <a class="btn green" href={site.delivery.url} target="_blank" rel="noopener"><T fr="Commander" en="Order" /></a>
+        </div>
+      </section>
+
+      <!-- AVIS -->
+      <section class="avis" aria-labelledby="h-avis">
+        <h2 id="h-avis"><T fr="Ce qu’en disent les clients" en="What guests say" /></h2>
+        <div class="scores">
+          {google && (
+            <a class="ardoise score main" href={google.url} target="_blank" rel="noopener">
+              <span class="s-n">{String(google.score).replace('.', ',')}</span><span class="s-o">/5</span>
+              <span class="s-l">{google.source} · {google.count} <T fr="avis" en="reviews" /></span>
+            </a>
+          )}
+          {others.map((r) => (
+            <a class="ardoise score" href={r.url} target="_blank" rel="noopener">
+              <span class="s-n">{String(r.score).replace('.', ',')}</span><span class="s-o">/5</span>
+              <span class="s-l">{r.source} · {r.count} <T fr="avis" en="reviews" /></span>
+            </a>
+          ))}
+        </div>
+        {reviews.length > 0 && (
+          <ul class="quotes">
+            {reviews.slice(0, 4).map((r) => (
+              <li lang={r.lang}><blockquote>«&#8239;{fine(r.quote)}&#8239;»</blockquote><a href={r.url} target="_blank" rel="noopener">{r.source}</a></li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <!-- LE QUARTIER -->
+      <section class="quartier" id="quartier" aria-labelledby="h-q">
+        <img class="q-photo" src="/images/allees-boulodrome.jpg" alt="Les terrains de boules des Allées de la Liberté, en face de la rue Félix Faure" loading="lazy" />
+        <div class="q-card">
+          <h2 id="h-q"><T fr="En face des Allées" en="Right across the Allées" /></h2>
+          <p><T fr="Rue Félix Faure, côté piéton. Les boulistes jouent en face, le Vieux-Port est au bout de la rue." en="Rue Félix Faure, the pedestrian side. Pétanque players across the street, the Old Port at the end of it." /></p>
+          <ul class="around">
+            {around.map((a) => (<li><span><T fr={fine(a.place)} en={a.placeEn} /></span><b>{a.minutes} min</b></li>))}
+          </ul>
+          <p class="fine"><T fr="Temps à pied, approximatifs." en="Walking times, approximate." /></p>
+          <p class="credit">Photo : Benoît Prieur, CC0</p>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="faq" aria-labelledby="h-faq">
+        <h2 id="h-faq"><T fr="Questions qu’on nous pose" en="Questions we get" /></h2>
+        <div class="faq-list">
+          {faq.map((f) => (
+            <details>
+              <summary><T fr={fine(f.q)} en={f.qEn} /><span class="plus" aria-hidden="true"></span></summary>
+              <p><T fr={fine(f.a)} en={f.aEn} /></p>
+            </details>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot" id="infos">
+      <div class="foot-in">
+        <Logo class="foot-logo" title="Frensh" />
+        <div>
+          <h2><T fr="Passez nous voir." en="Come and see us." /></h2>
+          <p class="status" data-status><span class="dot" aria-hidden="true"></span><span data-status-text>Ouvert · jusqu’à 22h30</span></p>
+        </div>
+        <dl>
+          <div><dt><T fr="Adresse" en="Address" /></dt><dd>{site.address.street}<br />{site.address.zip} {site.address.city}</dd></div>
+          <div><dt><T fr="Horaires" en="Hours" /></dt><dd><T fr={fine(site.hours.days)} en={site.hours.daysEn} />, 9h – 22h30</dd></div>
+          <div><dt><T fr="Réserver" en="Book" /></dt><dd><a href={site.phoneHref}>{site.phone}</a></dd></div>
+          <div><dt><T fr="Suivre" en="Follow" /></dt><dd><a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a> · <a href={site.social.facebook} target="_blank" rel="noopener">Facebook</a></dd></div>
+        </dl>
+        <a class="btn chalk" href={site.address.mapsUrl} target="_blank" rel="noopener"><T fr="Itinéraire" en="Directions" /></a>
+      </div>
+      <p class="legal">© Frensh · SAS BAMO · <T fr="Photos du quartier : Wikimedia Commons (crédits sur chaque image)." en="Area photos: Wikimedia Commons (credits on each image)." /></p>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  /* ---------- browser surfaces ---------- */
+  :global(html) { background: #f3ecd6; scrollbar-color: #36452c #f3ecd6; }
+  :global(body) { margin: 0; }
+
+  /* ---------- system ----------
+     Enseigne : Young Serif, l'égyptienne des devantures peintes et des étiquettes de cagettes.
+     Craie : Kalam, la main du serveur sur l'ardoise. Texte : Commissioner, grotesque humaniste lisible au soleil. */
+  .m {
+    /* Charte du logo : vert sapin #36452c sur crème #fbf8ea. Ardoise = tableau vert d'école. */
+    --paper: #f3ecd6; --paper-d: #e4d9b9; --ink: #1c2417; --ink-2: #46503c;
+    --slate: #1f281b; --chalk: #fbf8ea; --chalk-2: #cfd3bf; --leaf: #b8d08f;
+    --green: #36452c; --green-d: #26311f; --green-ink: #2c3a23; --wood: #b4874f; --wood-d: #8b6235;
+    --sign: 'Young Serif', Rockwell, Georgia, serif;
+    --hand: 'Kalam', 'Segoe Print', 'Bradley Hand', cursive;
+    --text: 'Commissioner Variable', 'Segoe UI', system-ui, sans-serif;
+    --pad: max(20px, 4vw, calc((100vw - 1400px) / 2));
+    --sec: clamp(72px, 3rem + 5vw, 136px);
+    --h-gap: clamp(20px, 0.8rem + 1.2vw, 36px);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ring: var(--ink);
+    background: var(--paper); color: var(--ink); caret-color: var(--green);
+    font: 430 1.125rem/1.6 var(--text); overflow-x: clip;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  .m *, .m *::before, .m *::after { box-sizing: border-box; }
+  .m :global(::selection) { background: var(--green); color: var(--chalk); }
+  .m :global(:focus-visible) { outline: 3px solid var(--ring); outline-offset: 3px; }
+  :global(:where(.m) :is(h1, h2, h3)) { font-family: var(--sign); font-weight: 400; letter-spacing: -0.015em; line-height: 1.08; text-wrap: balance; margin: 0; }
+  :global(:where(.m) p) { text-wrap: pretty; }
+  :global(:where(.m) img) { display: block; max-width: 100%; }
+  :global(:where(.m) a) { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+  .etal h1, .story h2, .carte-head h2, .avis h2, .q-card h2, .faq h2 { color: var(--green); }
+  .label { font: 650 0.75rem/1.2 var(--text); letter-spacing: 0.12em; text-transform: uppercase; }
+
+  /* ---------- header ---------- */
+  .top { position: relative; z-index: 5; display: flex; align-items: center; gap: 12px clamp(16px, 3vw, 40px); padding: 18px var(--pad); }
+  .logo { display: block; color: var(--green); line-height: 0; }
+  .logo :global(svg) { display: block; width: clamp(118px, 9vw, 150px); height: auto; }
+  .top nav { display: flex; gap: 10px; }
+  .pick { display: inline-block; padding: 7px 14px 6px; background: var(--slate); color: var(--chalk); font: 700 1.2rem/1.25 var(--hand); text-decoration: none; border-radius: 4px; transform: rotate(var(--r, -1.5deg)); transition: transform 0.35s var(--ease), background 0.2s; box-shadow: 0 3px 6px rgb(40 25 5 / 0.25); }
+  .pick:nth-child(2) { --r: 1.2deg; } .pick:nth-child(3) { --r: -0.8deg; }
+  .pick:hover { transform: rotate(0deg) translateY(-2px); }
+  .pick:active { transform: rotate(0deg) translateY(0); }
+  .top-r { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .status { display: inline-flex; align-items: center; gap: 8px; margin: 0; font: 600 0.95rem/1.2 var(--text); }
+  .status .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: #3f8a2e; box-shadow: 0 0 0 3px rgb(63 138 46 / 0.25); }
+  .status[data-open='false'] .dot { background: #b0442a; box-shadow: 0 0 0 3px rgb(176 68 42 / 0.22); }
+  .lang { min-width: 44px; min-height: 40px; font: 700 0.8rem/1 var(--text); letter-spacing: 0.1em; background: transparent; color: var(--ink); border: 1.5px solid var(--ink); border-radius: 4px; padding: 0 10px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+  .lang:hover { background: var(--green); border-color: var(--green); color: var(--chalk); }
+
+  /* ---------- l'étal ----------
+     La grande ardoise occupe les colonnes 2 à 4 ; son piquet vit seul dans la colonne 3 (couloir sous le centre de l'ardoise)
+     et descend jusqu'au bandeau, qui passe devant lui. Les cagettes s'arrêtent à la colonne 2 : elles ne croisent jamais le piquet. */
+  .etal {
+    --bw: clamp(340px, 31vw, 470px); --lane: 44px;
+    position: relative; display: grid;
+    grid-template-columns: minmax(0, 1fr) calc((var(--bw) - var(--lane)) / 2) var(--lane) calc((var(--bw) - var(--lane)) / 2);
+    grid-template-rows: 1fr auto auto;
+    padding: clamp(8px, 2vh, 24px) var(--pad) 0;
+    min-height: min(calc(100svh - 104px), 940px);
+  }
+  .etal-copy { grid-area: 1 / 1 / 2 / 2; align-self: center; padding-right: clamp(28px, 4vw, 72px); }
+  .etal h1 { font-size: clamp(2.6rem, 1.2rem + 4.1vw, 5.25rem); line-height: 1.04; letter-spacing: -0.02em; max-width: 13.5ch; }
+  .lede { max-width: 54ch; margin: clamp(16px, 2vw, 24px) 0 0; font-size: clamp(1.125rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; color: var(--ink-2); text-wrap: balance; }
+
+  .ardoise { position: relative; background: var(--slate); color: var(--chalk); border-radius: 10px; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 14px 30px -10px rgb(40 25 5 / 0.55); }
+  .big { --ring: var(--chalk); grid-area: 1 / 2 / 2 / 5; align-self: end; z-index: 3; padding: clamp(20px, 2vw, 30px) clamp(20px, 2.2vw, 32px) clamp(22px, 2.2vw, 30px); transform: rotate(1.2deg); border: 10px solid var(--wood); border-image: linear-gradient(160deg, #c79a5e, #8f6436) 1; }
+  .stick { grid-area: 2 / 3 / 4 / 4; justify-self: center; z-index: 1; width: 14px; margin-top: -56px; background: linear-gradient(90deg, #8d6232, #c99a60 45%, #a77a45); box-shadow: 3px 0 6px rgb(40 25 5 / 0.3); border-radius: 2px 2px 0 0; }
+  .a-k { margin: 0; font: 700 1.45rem/1.2 var(--hand); color: var(--chalk-2); }
+  .a-hours { margin: 2px 0 14px; font: 400 clamp(2.6rem, 1.5rem + 2.3vw, 4rem)/1.05 var(--sign); letter-spacing: -0.01em; white-space: nowrap; }
+  .a-addr { display: grid; gap: 4px; margin: 0 0 22px; }
+  .a-street { font: 700 1.55rem/1.2 var(--hand); }
+  .a-near { font: 400 1.2rem/1.35 var(--hand); color: var(--chalk-2); letter-spacing: 0.005em; }
+  .a-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 48px; padding: 0 18px; border: 0; border-radius: 6px; font: 650 0.95rem/1 var(--text); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform 0.25s var(--ease), background 0.2s, color 0.2s, box-shadow 0.2s; }
+  .btn svg { flex: none; width: 19px; height: 19px; fill: currentColor; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn.solid { background: var(--chalk); color: var(--green); }
+  .btn.solid:hover { background: #fff; }
+  .btn.chalk { background: transparent; color: var(--chalk); box-shadow: inset 0 0 0 2px var(--chalk); letter-spacing: 0.04em; }
+  .btn.chalk:hover { background: var(--chalk); color: var(--slate); }
+  .btn.green { background: var(--green); color: var(--chalk); }
+  .btn.green:hover { background: var(--green-d); }
+
+  .crates { grid-area: 2 / 1 / 3 / 3; z-index: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 28px); align-items: end; list-style: none; margin: clamp(48px, 7vh, 72px) 0 0; padding: 0; }
+  .crate { position: relative; }
+  .crate.c1 { transform: translateY(-14px); }
+  .crate-box { position: relative; aspect-ratio: 16 / 11; border: 10px solid var(--wood); border-bottom-width: 0; background: var(--wood-d); box-shadow: inset 0 -2px 0 var(--wood-d); }
+  .crate-box img { width: 100%; height: 100%; object-fit: cover; }
+  .slat { position: absolute; left: -10px; right: -10px; bottom: 0; height: 32%; min-height: 40px; background: linear-gradient(180deg, #c1925a, #a97b44); border-top: 2px solid #8b6235; display: grid; place-items: center; }
+  .slat span { font: 400 clamp(0.7rem, 0.5rem + 0.35vw, 0.9rem)/1 var(--sign); letter-spacing: 0.16em; color: var(--green-ink); opacity: 0.9; mix-blend-mode: multiply; white-space: nowrap; }
+  .tag { position: absolute; left: 12px; top: -24px; z-index: 1; white-space: nowrap; margin: 0; display: grid; gap: 3px; padding: 8px 13px 8px; background: var(--slate); color: var(--chalk); border-radius: 6px; transform: rotate(-2.5deg); transform-origin: 50% 0; box-shadow: 0 6px 12px -4px rgb(40 25 5 / 0.5); }
+  .c1 .tag { left: auto; right: 12px; transform: rotate(2deg); }
+  .c2 .tag { transform: rotate(-1.5deg); }
+  .crate:hover .tag { animation: swing 1.4s var(--ease); }
+  @keyframes swing { 0% { rotate: 0deg; } 25% { rotate: 4deg; } 50% { rotate: -2.5deg; } 75% { rotate: 1deg; } 100% { rotate: 0deg; } }
+  .tag-t { font: 650 0.72rem/1.2 var(--text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk-2); }
+  .tag-n { font: 700 clamp(1.15rem, 0.8rem + 0.5vw, 1.3rem)/1.15 var(--hand); }
+  .tag.small { position: static; display: inline-grid; transform: rotate(-2deg); margin: -18px 0 0 16px; }
+
+  .nappe { grid-area: 3 / 1 / 4 / -1; position: relative; z-index: 2; margin: 0 calc(-1 * var(--pad)); padding: 15px 0 16px; background: var(--green); color: var(--chalk); overflow: hidden; box-shadow: 0 -4px 10px -6px rgb(40 25 5 / 0.45); }
+  .nappe span { display: block; white-space: nowrap; font: 400 clamp(0.9rem, 0.75rem + 0.3vw, 1.05rem)/1.2 var(--sign); letter-spacing: 0.18em; text-transform: uppercase; animation: drift 60s linear infinite; }
+  @keyframes drift { to { transform: translateX(-50%); } }
+
+  /* ---------- story ---------- */
+  .story { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 88px); padding: var(--sec) var(--pad) calc(var(--sec) * 0.75); align-items: center; }
+  .story-photo { margin: 0; }
+  .story-photo img { aspect-ratio: 3 / 2; object-fit: cover; width: 100%; border-radius: 4px; box-shadow: 0 20px 40px -20px rgb(40 25 5 / 0.6); }
+  .story-photo figcaption, .credit { font-size: 0.8125rem; line-height: 1.4; color: var(--ink-2); margin-top: 10px; }
+  .story h2 { font-size: clamp(2.1rem, 1.3rem + 2.6vw, 3.5rem); margin-bottom: var(--h-gap); }
+  .story-copy p { max-width: 68ch; margin: 0 0 0.9em; }
+  .chef { margin: 32px 0 0; max-width: 360px; }
+  .chef img { aspect-ratio: 3 / 2; object-fit: cover; border: 8px solid var(--chalk); box-shadow: 0 12px 24px -12px rgb(40 25 5 / 0.6); transform: rotate(-1.5deg); }
+
+  /* ---------- moments ---------- */
+  .hours { --ring: var(--chalk); padding: calc(var(--sec) * 0.75) var(--pad); background: var(--slate); color: var(--chalk); }
+  .hours h2 { font-size: clamp(2.1rem, 1.3rem + 2.6vw, 3.5rem); max-width: 20ch; margin-bottom: clamp(28px, 4vw, 52px); }
+  .moments { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); }
+  .moment { position: relative; display: flex; flex-direction: column; }
+  .moment img { aspect-ratio: 3 / 4; width: 100%; object-fit: cover; border-radius: 4px; filter: saturate(1.05); }
+  .moment-label { position: relative; flex: 1; margin: -40px 12px 0; padding: 12px 16px 16px; background: var(--chalk); color: var(--ink); border-radius: 6px; transform: rotate(var(--r, -1deg)); box-shadow: 0 8px 18px -8px rgb(0 0 0 / 0.6); }
+  .moment:nth-child(even) .moment-label { --r: 1deg; }
+  .moment-label h3 { font-size: 1.5rem; margin: 4px 0 6px; }
+  .moment-label p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--ink-2); }
+  .moment-label .m-time { font: 700 1.25rem/1.2 var(--hand); color: var(--green); }
+  .moment.is-now .moment-label { background: var(--leaf); color: var(--ink); }
+  .moment.is-now .moment-label p { color: var(--ink); }
+
+  /* ---------- carte ---------- */
+  .carte { padding: var(--sec) var(--pad); }
+  .carte-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px 48px; margin-bottom: clamp(32px, 4vw, 56px); }
+  .carte-head h2 { font-size: clamp(3rem, 1.6rem + 5vw, 6rem); line-height: 1; }
+  .carte-head p { max-width: 46ch; margin: 0; color: var(--ink-2); }
+  .stalls { columns: 3 300px; column-gap: clamp(16px, 2.4vw, 32px); }
+  .stall { --ring: var(--chalk); break-inside: avoid; margin: 0 0 clamp(16px, 2.4vw, 32px); background: var(--slate); color: var(--chalk); border-radius: 8px; padding: 24px 24px 18px; box-shadow: 0 14px 26px -16px rgb(40 25 5 / 0.7); }
+  .stall-sign { font-size: 1.65rem; color: var(--chalk); padding-bottom: 12px; margin-bottom: 6px; border-bottom: 1.5px dashed rgb(243 239 228 / 0.35); }
+  .stall-note { margin: 8px 0 4px; font-size: 0.9375rem; line-height: 1.45; color: var(--chalk-2); }
+  .stall ul { list-style: none; margin: 0; padding: 0; }
+  .stall li { padding: 12px 0; border-bottom: 1px solid rgb(243 239 228 / 0.12); }
+  .stall li:last-child { border-bottom: 0; padding-bottom: 6px; }
+  .it-n { margin: 0; font: 700 1.4rem/1.2 var(--hand); display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+  .star { font: 650 0.68rem/1 var(--text); letter-spacing: 0.1em; text-transform: uppercase; background: var(--leaf); color: var(--slate); padding: 5px 7px 4px; border-radius: 3px; translate: 0 -2px; }
+  .it-d { margin: 4px 0 0; font-size: 0.9375rem; font-weight: 450; line-height: 1.5; letter-spacing: 0.005em; color: var(--chalk-2); }
+  .it-t { margin: 6px 0 0; font: 650 0.7rem/1.2 var(--text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--leaf); }
+  .deliver { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 12px; padding-top: 24px; border-top: 2px dashed rgb(29 26 22 / 0.25); font-weight: 600; }
+  .deliver p { margin: 0; }
+
+  /* ---------- avis ---------- */
+  .avis { padding: 0 var(--pad) var(--sec); }
+  .avis h2 { font-size: clamp(2.1rem, 1.3rem + 2.6vw, 3.5rem); margin-bottom: clamp(28px, 3vw, 40px); }
+  .scores { display: flex; flex-wrap: wrap; gap: 20px; align-items: end; }
+  .score { display: grid; grid-template-columns: auto auto; justify-content: start; align-items: baseline; column-gap: 4px; padding: 16px 24px 18px; text-decoration: none; transform: rotate(-1.5deg); transition: transform 0.3s var(--ease); }
+  .score:nth-child(2) { transform: rotate(1.2deg); } .score:nth-child(3) { transform: rotate(-0.8deg); }
+  .score:hover { transform: rotate(0) translateY(-3px); }
+  .s-n { font: 400 3.2rem/1 var(--sign); }
+  .score.main .s-n { font-size: 4.6rem; }
+  .s-o { font: 700 1.5rem/1 var(--hand); color: var(--chalk-2); }
+  .s-l { grid-column: 1 / -1; margin-top: 6px; font: 700 1.15rem/1.2 var(--hand); color: var(--chalk-2); }
+  .quotes { list-style: none; margin: clamp(36px, 4vw, 52px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px clamp(28px, 4vw, 56px); max-width: 1100px; }
+  .quotes blockquote { margin: 0 0 10px; font: 400 clamp(1.4rem, 1.1rem + 0.8vw, 1.85rem)/1.25 var(--sign); letter-spacing: -0.01em; text-wrap: balance; }
+  .quotes a { font: 650 0.75rem/1.2 var(--text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); }
+  .quotes a:hover { color: var(--green); }
+
+  /* ---------- quartier ---------- */
+  .quartier { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); min-height: min(80vh, 760px); }
+  .q-photo { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+  .q-card { grid-area: 1 / 1; align-self: center; justify-self: end; margin: clamp(24px, 5vw, 80px) var(--pad); width: min(460px, calc(100% - 32px)); background: var(--chalk); padding: 30px 32px 26px; border-radius: 6px; box-shadow: 0 24px 50px -20px rgb(0 0 0 / 0.55); transform: rotate(-1deg); }
+  .q-card h2 { font-size: clamp(2rem, 1.4rem + 1.8vw, 2.9rem); margin-bottom: 12px; }
+  .q-card p { margin: 0 0 16px; }
+  .around { list-style: none; margin: 0; padding: 0; }
+  .around li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 9px 0; border-bottom: 1.5px dashed rgb(29 26 22 / 0.2); font: 700 1.25rem/1.25 var(--hand); }
+  .around b { font: 650 1rem/1.3 var(--text); font-variant-numeric: tabular-nums; color: var(--green); white-space: nowrap; }
+  .q-card .fine { font-size: 0.875rem; color: var(--ink-2); margin: 12px 0 2px; }
+  .q-card .credit { margin: 0; }
+
+  /* ---------- faq ---------- */
+  .faq { padding: var(--sec) var(--pad); display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: 28px clamp(32px, 6vw, 96px); align-items: start; }
+  .faq h2 { font-size: clamp(2.1rem, 1.3rem + 2.6vw, 3.5rem); position: sticky; top: 32px; }
+  .faq-list { border-top: 1.5px dashed rgb(29 26 22 / 0.3); }
+  .faq details { border-bottom: 1.5px dashed rgb(29 26 22 / 0.3); }
+  .faq summary { position: relative; display: block; cursor: pointer; list-style: none; padding: 18px 48px 18px 0; font: 400 1.25rem/1.3 var(--sign); transition: color 0.2s; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary:hover { color: var(--green); }
+  .plus { position: absolute; right: 6px; top: 50%; width: 18px; height: 18px; margin-top: -9px; transition: rotate 0.3s var(--ease); }
+  .plus::before, .plus::after { content: ''; position: absolute; left: 0; top: 8px; width: 18px; height: 2px; border-radius: 1px; background: var(--green); }
+  .plus::after { rotate: 90deg; }
+  .faq details[open] .plus { rotate: 45deg; }
+  .faq details p { margin: 0 0 22px; max-width: 68ch; color: var(--ink-2); }
+
+  /* ---------- footer ---------- */
+  .foot { --ring: var(--chalk); background: var(--green); color: var(--chalk); padding: calc(var(--sec) * 0.7) var(--pad) 88px; }
+  .foot-in { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.2fr) auto; gap: 28px clamp(24px, 4vw, 56px); align-items: center; }
+  .foot :global(.foot-logo) { display: block; width: clamp(180px, 16vw, 240px); height: auto; color: var(--chalk); }
+  .foot h2 { font-size: clamp(2.2rem, 1.4rem + 2.8vw, 3.75rem); line-height: 1.02; margin-bottom: 14px; }
+  .foot .status .dot { background: var(--leaf); box-shadow: 0 0 0 3px rgb(184 208 143 / 0.3); }
+  .foot dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; margin: 0; }
+  .foot dt { font: 650 0.72rem/1.2 var(--text); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; color: var(--chalk-2); }
+  .foot dd { margin: 0; font-weight: 600; line-height: 1.45; }
+  .foot a { color: var(--chalk); }
+  .foot dd a:hover { text-decoration-thickness: 2px; }
+  .foot .btn.chalk { color: var(--chalk); box-shadow: inset 0 0 0 2px var(--chalk); }
+  .foot .btn.chalk:hover { background: var(--chalk); color: var(--green); }
+  .legal { margin: clamp(36px, 4vw, 52px) 0 0; padding-top: 20px; border-top: 1px solid rgb(251 248 234 / 0.3); font-size: 0.8125rem; line-height: 1.5; color: var(--chalk-2); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1100px) {
+    .foot-in { grid-template-columns: auto minmax(0, 1fr); }
+    .foot dl { grid-column: 1 / -1; }
+    .foot-in > .btn { grid-column: 1 / -1; justify-self: start; }
+  }
+  @media (max-width: 860px) {
+    .top { flex-wrap: wrap; padding-top: 14px; padding-bottom: 10px; }
+    .top nav { order: 3; flex: 1 0 100%; gap: 8px; padding: 2px 0 4px; }
+    .pick { font-size: 1.1rem; padding: 6px 12px 5px; }
+    .etal { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; min-height: 0; padding-top: 12px; }
+    .etal-copy, .big, .crates, .nappe { grid-area: auto; }
+    .etal-copy { padding-right: 0; }
+    .big { margin-top: 32px; transform: rotate(-0.8deg); }
+    .a-cta .btn { flex: 1 1 auto; }
+    .stick { display: none; }
+    .crates { grid-template-columns: repeat(3, 76%); overflow-x: auto; scroll-snap-type: x mandatory; margin: 8px calc(-1 * var(--pad)) 0; padding: 44px var(--pad) 22px; scroll-padding-inline: var(--pad); scrollbar-width: none; }
+    .crate { scroll-snap-align: start; }
+    .crate.c1 { transform: none; }
+    .story, .faq { grid-template-columns: 1fr; }
+    .faq h2 { position: static; }
+    .moments { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 32px; }
+    .quartier { min-height: 0; }
+    .q-photo { grid-area: auto; aspect-ratio: 4 / 3; height: auto; }
+    .q-card { grid-area: auto; justify-self: center; position: relative; margin: -56px 16px 0; }
+  }
+  @media (max-width: 520px) {
+    .top-r { gap: 10px; }
+    .status { font-size: 0.875rem; }
+    .moments { gap: 28px 10px; }
+    .moment-label { margin: -32px 6px 0; padding: 10px 12px 12px; }
+    .moment-label h3 { font-size: 1.25rem; }
+    .moment-label p { font-size: 0.9375rem; }
+    .foot-in { grid-template-columns: 1fr; }
+    .foot dl { grid-template-columns: 1fr; }
+    .scores { gap: 14px; }
+    .score { padding: 12px 16px 14px; }
+    .s-n { font-size: 2.6rem; }
+    .score.main .s-n { font-size: 3.4rem; }
+    .s-l { font-size: 1.05rem; }
+    .faq summary { font-size: 1.15rem; }
+  }
+</style>
+
+<script>
+  import { parisMinutes } from '../scripts/frensh';
+  const toMin = (s: string) => { const [h, m] = s.split(':').map(Number); return h * 60 + (m || 0); };
+  const mark = () => {
+    const now = parisMinutes();
+    document.querySelectorAll<HTMLElement>('.moment').forEach((el) => {
+      const a = toMin(el.dataset.from || '0:0'); const b = toMin(el.dataset.to || '0:0');
+      el.classList.toggle('is-now', now >= a && now < b);
+    });
+  };
+  mark(); setInterval(mark, 60_000);
+</script>

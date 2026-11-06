@@ -1,0 +1,8 @@
+---
+/** Split-flap text. Server-renders the final characters (works without JS); the page script animates them. */
+interface Props { text: string; len?: number; class?: string; }
+const { text, len, class: cls = '' } = Astro.props;
+const up = text.toUpperCase();
+const chars = Array.from(len ? up.padEnd(len, ' ').slice(0, len) : up);
+---
+<span class={`flap ${cls}`} data-text={up} role="text" aria-label={text}>{chars.map((c) => <span class="cell" aria-hidden="true">{c === ' ' ? ' ' : c}</span>)}</span>

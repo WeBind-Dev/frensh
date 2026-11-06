@@ -1,0 +1,6 @@
+---
+/** Bilingual text: renders FR + EN spans; CSS on html[data-lang] hides the inactive one. */
+interface Props { fr: string; en?: string; }
+const { fr, en } = Astro.props;
+---
+{en && en !== fr ? (<><span lang="fr" set:html={fr} /><span lang="en" set:html={en} /></>) : <span set:html={fr} />}
