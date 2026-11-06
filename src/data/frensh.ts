@@ -1,7 +1,7 @@
 // Frensh, brasserie à Cannes : tout le contenu du site (FR + EN).
 // Règles : prix uniquement tels qu'imprimés sur la carte papier (photos du 06/11/2026),
 // aucun avis inventé (extraits réels, sourcés), distances approximatives.
-// Plus de livraison Deliveroo (confirmé par le propriétaire le 06/11/2026). Happy hour non confirmé : non affiché.
+// Plus de livraison Deliveroo (confirmé par le propriétaire le 06/11/2026). Happy hour confirmé par la carte officielle : 17h–20h (boissons), bouteilles de vin −30 % de 16h à 22h.
 // Sources : research/recherche-frensh.md (relevés du 06/11/2026) + infos du propriétaire.
 
 export type MomentId = 'matin' | 'midi' | 'apero' | 'soir';
@@ -37,7 +37,7 @@ export interface MenuItem {
 
 export interface MenuSection {
   id: string;
-  group: 'cuisine' | 'boissons' | 'bar';
+  group: 'cuisine' | 'happy' | 'boissons' | 'bar';
   title: string;
   titleEn: string;
   when?: string;
@@ -128,6 +128,7 @@ export const site = {
   practical: [
     'Terrasse au soleil sur la rue piétonne',
     'Service continu de 9h à 22h30, 7 jours sur 7',
+    'Happy hour de 17h à 20h',
     'Chiens acceptés',
     'Titres-restaurant et Pluxee acceptés',
     'Options végétariennes',
@@ -137,6 +138,7 @@ export const site = {
   practicalEn: [
     'Sunny terrace on a pedestrian street',
     'Open non-stop, 9 am to 10:30 pm, 7 days a week',
+    'Happy hour from 5 to 8 pm',
     'Dogs welcome',
     'Meal vouchers accepted (titres-restaurant, Pluxee)',
     'Vegetarian options',
@@ -159,12 +161,12 @@ export const pitch = {
   long: [
     'Frensh, c’est fresh et french dans le même mot. Le nom dit l’essentiel : des classiques de brasserie préparés sur place avec des produits frais. Salades, clubs, croques, burgers, fish and chips, tartares, entrecôte Simmental. Et des frites fraîches que les clients citent encore dans leurs avis.',
     'On est au 43 bis rue Félix Faure, dans la partie piétonne, en face des Allées de la Liberté. Le Vieux-Port est à trois minutes à pied, le Palais à quatre. Depuis la terrasse, on voit les boulistes, le kiosque et les gens qui filent au bureau.',
-    'On ouvre à 9h avec le café, les jus pressés et la formule petit-déj à 8,90 €. On ferme à 22h30. Entre les deux, la cuisine ne s’arrête pas : vous mangez quand vous avez faim.',
+    'On ouvre à 9h avec le café, les jus pressés et la formule petit-déj à 10 €. On ferme à 22h30. Entre les deux, la cuisine ne s’arrête pas : vous mangez quand vous avez faim.',
   ],
   longEn: [
     'Frensh is fresh and French squeezed into one word. That’s the whole idea: brasserie classics made here, from fresh produce. Salads, club sandwiches, croques, burgers, fish and chips, tartares, Simmental rib-eye. And fresh fries that people still mention in their reviews.',
     'You’ll find us at 43 bis rue Félix Faure, on the pedestrian stretch, right across from the Allées de la Liberté. The Old Port is a three-minute walk, the Palais des Festivals four. From the terrace you can watch the pétanque players, the bandstand and the office crowd going by.',
-    'We open at 9 am with coffee, fresh-pressed juice and the €8.90 breakfast set. We close at 10:30 pm. In between, the kitchen keeps going, so you can eat whenever you’re hungry.',
+    'We open at 9 am with coffee, fresh-pressed juice and the €10 breakfast set. We close at 10:30 pm. In between, the kitchen keeps going, so you can eat whenever you’re hungry.',
   ],
 };
 
@@ -181,10 +183,10 @@ export const moments: Moment[] = [
     titleEn: 'Morning',
     line: 'Café, croissant, jus pressé. Le soleil est déjà sur la terrasse.',
     lineEn: 'Coffee, croissant, fresh juice. The sun’s already on the terrace.',
-    text: 'La terrasse prend le soleil dès l’ouverture. Un café, un croissant, un jus pressé, et la journée peut commencer. La formule complète est à 8,90 €. Avant le bureau, après le marché Forville, ou juste parce qu’il fait beau.',
-    textEn: 'The terrace catches the sun as soon as we open. A coffee, a croissant, a fresh juice, and the day can start. The full breakfast set is €8.90. Before work, after the Forville market, or just because it’s nice out.',
-    items: ['Formule petit-déj 8,90 €', 'Croissant ou pain au chocolat', 'Jus pressés'],
-    itemsEn: ['Breakfast set €8.90', 'Croissant or pain au chocolat', 'Fresh-pressed juices'],
+    text: 'La terrasse prend le soleil dès l’ouverture. Un café, un croissant, un jus pressé, et la journée peut commencer. La formule complète est à 10 €. Avant le bureau, après le marché Forville, ou juste parce qu’il fait beau.',
+    textEn: 'The terrace catches the sun as soon as we open. A coffee, a croissant, a fresh juice, and the day can start. The full breakfast set is €10. Before work, after the Forville market, or just because it’s nice out.',
+    items: ['Formule petit-déj 10 €', 'Croissant ou pain au chocolat', 'Jus pressés'],
+    itemsEn: ['Breakfast set €10', 'Croissant or pain au chocolat', 'Fresh-pressed juices'],
     photo: '/images/petit-dej-terrasse.jpg',
     photoAlt: 'Croissant, pain, confiture, café et jus d’orange sur une table de la terrasse, au soleil.',
     photoAltEn: 'Croissant, bread, jam, coffee and orange juice on a terrace table in the sun.',
@@ -211,8 +213,8 @@ export const moments: Moment[] = [
     to: '20:00',
     title: 'L’apéro',
     titleEn: 'Aperitivo',
-    line: 'Une planche, un verre, et la lumière qui baisse sur les Allées.',
-    lineEn: 'A sharing board, a drink, and the light going gold over the Allées.',
+    line: 'Happy hour de 17h à 20h : spritz à 6,50 €, pinte à 6 €. Et la lumière qui baisse sur les Allées.',
+    lineEn: 'Happy hour from 5 to 8 pm: spritz €6.50, pint €6. And the light going gold over the Allées.',
     text: 'Planche charcuteries-fromages, camembert rôti, pinsa romana, une pression, un rosé AOP Provence au verre, un Spritz ou un Mojito. Les boulistes finissent leur partie en face, vous finissez votre verre.',
     textEn: 'Charcuterie and cheese boards, roasted camembert, pinsa romana, a draught beer, Provence rosé by the glass, a Spritz or a Mojito. The pétanque players finish their game across the street, you finish your drink.',
     items: ['Planches à partager', 'Pinsa romana', 'Bières pression', 'Rosé AOP Provence', 'Spritz, Mojito'],
@@ -240,11 +242,11 @@ export const moments: Moment[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* La carte : relevée sur les cartes papier photographiées le 06/11/2026 */
-/* (assets/menu-2026-11/menu-1 à 5). Prix en euros, tels qu'imprimés.    */
+/* La carte : reprise des fichiers officiels (PDF) fournis le 06/11/2026 */
+/* (assets/carte-officielle/). Prix en euros, tels qu'imprimés.         */
 /* ------------------------------------------------------------------ */
 
-export type MenuGroup = 'cuisine' | 'boissons' | 'bar';
+export type MenuGroup = 'cuisine' | 'happy' | 'boissons' | 'bar';
 
 const it = (
   name: string,
@@ -257,13 +259,14 @@ const it = (
 
 export const menuGroups: { id: MenuGroup; title: string; titleEn: string }[] = [
   { id: 'cuisine', title: 'La cuisine', titleEn: 'Food' },
+  { id: 'happy', title: 'Happy hour', titleEn: 'Happy hour' },
   { id: 'boissons', title: 'Les boissons', titleEn: 'Drinks' },
   { id: 'bar', title: 'Le bar et les vins', titleEn: 'Bar & wine' },
 ];
 
 export const menuNote = {
-  text: 'Carte relevée en novembre 2026. Elle peut changer : en cas de doute, demandez à l’équipe.',
-  textEn: 'Menu as of November 2026. It may change, so ask the team if in doubt.',
+  text: 'La carte du moment. Elle peut changer : en cas de doute, demandez à l’équipe.',
+  textEn: 'Our current menu. It may change, so ask the team if in doubt.',
   allergens: 'Allergies ou intolérances : demandez le tableau des allergènes à l’équipe.',
   allergensEn: 'Allergies or intolerances? Ask the team for the allergen chart.',
 };
@@ -275,12 +278,27 @@ export const menu: MenuSection[] = [
     group: 'cuisine',
     title: 'The Breakfast Club',
     titleEn: 'The Breakfast Club',
-    when: 'Le matin',
-    whenEn: 'Mornings',
     items: [
-      it('La formule petit-déj', 'Breakfast set', '8,90 €',
+      it('La formule petit-déj', 'Breakfast set', '10 €',
         'Une boisson chaude, une orange ou pomme pressée, un croissant ou un pain au chocolat, des tartines avec beurre et confiture.',
         'A hot drink, a fresh orange or apple juice, a croissant or pain au chocolat, and bread with butter and jam.'),
+      it('Croissant ou pain au chocolat', 'Croissant or pain au chocolat', '2 €'),
+      it('Tartines, beurre et confiture', 'Bread, butter and jam', '3,50 €'),
+    ],
+  },
+  {
+    id: 'envies-salees',
+    group: 'cuisine',
+    title: 'Les envies salées',
+    titleEn: 'Savoury breakfast',
+    note: 'À ajouter à votre petit-déj.',
+    noteEn: 'To add to your breakfast.',
+    items: [
+      it('Omelette', 'Omelette', '9 €'),
+      it('Omelette jambon ou fromage', 'Ham or cheese omelette', '11 €'),
+      it('Omelette jambon-fromage', 'Ham and cheese omelette', '13 €'),
+      it('Croque-monsieur', 'Croque-monsieur', '12 €'),
+      it('Sandwich toasté façon club, saumon-avocat', 'Toasted club-style sandwich, salmon and avocado', '14 €'),
     ],
   },
   {
@@ -289,16 +307,18 @@ export const menu: MenuSection[] = [
     title: 'À partager',
     titleEn: 'To share',
     items: [
-      it('Planche de charcuteries ou fromages', 'Charcuterie or cheese board', '11 €'),
-      it('Planche de charcuteries et fromages', 'Charcuterie and cheese board', '14 €'),
-      it('Grande planche de charcuteries, fromages et pot de pâté', 'Large board: charcuterie, cheese and meat terrine', '21 €'),
+      it('Planche de charcuteries ou fromages', 'Charcuterie or cheese board', '12 €'),
+      it('Planche de charcuteries et fromages', 'Charcuterie and cheese board', '16 €'),
+      it('Tranche de terrine', 'Slice of terrine', '7 €'),
+      it('Camembert rôti au miel', 'Roasted camembert with honey', '14 €'),
+      it('Camembert rôti à la truffe', 'Truffle roasted camembert', '18 €'),
+      it('Charcuteries, fromages et tranche de terrine', 'Charcuterie, cheese and a slice of terrine', '22 €'),
       it('Planche Frensh surprise', 'Frensh surprise board', '26 €'),
-      it('Camembert rôti, au miel ou nature', 'Roasted camembert, with honey or plain', '14 €'),
-      it('Camembert rôti à la truffe', 'Truffle roasted camembert', '18 €', 'Accompagné de charcuteries : + 7 €.', 'With charcuterie: + €7.'),
-      it('Petite friture de joëls', 'Little fried fish', '14 €'),
       it('La boîte de sardines', 'Tin of sardines', '8 €'),
-      it('Le pot de pâté', 'Meat terrine', '6 €'),
-      it('Le panier de frites fraîches', 'Basket of fresh fries', '5,50 €'),
+      it('Petite friture de joëls', 'Little fried fish', '14 €'),
+      it('Le panier de frites fraîches', 'Basket of fresh fries', '6 €'),
+      it('Frites de panisses, sauce tartare', 'Panisse fries, tartar sauce', '9 €'),
+      it('Le saucisson entier', 'Whole saucisson', '12 €'),
     ],
   },
   {
@@ -309,7 +329,7 @@ export const menu: MenuSection[] = [
     note: 'L’alternative à la pizza : pâte légère et croustillante.',
     noteEn: 'The alternative to pizza: a light, crispy base.',
     items: [
-      it('Margherita', 'Margherita', '15 €'),
+      it('Marguerite', 'Margherita', '15 €', '', '', ['végé']),
       it('Chorizo', 'Chorizo', '17 €'),
       it('Truffe', 'Truffle', '18 €'),
     ],
@@ -323,14 +343,14 @@ export const menu: MenuSection[] = [
     noteEn: 'All salads are €19.',
     items: [
       it('Salade Caesar au poulet croustillant', 'Caesar salad with crispy chicken', '19 €',
-        'Romaine, tomate, œuf, croûtons, parmesan, poulet croustillant, sauce Caesar maison.',
-        'Romaine lettuce, tomato, egg, croutons, parmesan, crispy chicken, homemade Caesar dressing.'),
+        'Romaine, tomate, œuf, croûtons, parmesan, poulet croustillant, sauce Caesar maison. Supplément bacon : 2 €.',
+        'Romaine lettuce, tomato, egg, croutons, parmesan, crispy chicken, homemade Caesar dressing. Extra bacon: €2.'),
       it('Salade niçoise', 'Niçoise salad', '19 €',
         'Mesclun, tomate, concombre, poivron, olives, oignons, thon, anchois, œuf.',
         'Mixed greens, tomato, cucumber, bell pepper, olives, onions, tuna, anchovies, egg.'),
       it('Veggie falafel', 'Veggie falafel', '19 €',
-        'Mesclun, tomate, concombre, carotte, poivron, avocat, falafels, olives.',
-        'Mixed greens, tomato, cucumber, carrot, bell pepper, avocado, falafel, olives.', ['végé']),
+        'Mesclun, tomate, concombre, oignons, poivron, avocat, falafels, olives.',
+        'Mixed greens, tomato, cucumber, onions, bell pepper, avocado, falafel, olives.', ['végé']),
       it('Chèvre chaud et jambon cru', 'Warm goat cheese and cured ham', '19 €',
         'Mesclun, tomate, chèvre chaud, miel, noix, jambon cru.',
         'Mixed greens, tomato, warm goat cheese, honey, walnuts, cured ham.'),
@@ -348,11 +368,11 @@ export const menu: MenuSection[] = [
     noteEn: 'Served with fries.',
     items: [
       it('Norvégien au saumon fumé', 'Smoked salmon club', '20 €',
-        'Salade, saumon fumé, avocat, tomate, œuf, cream cheese.',
-        'Salad, smoked salmon, avocado, tomato, egg, cream cheese.'),
+        'Pain brioché, salade, saumon fumé, avocat, tomate, cream cheese citronné.',
+        'Brioche bread, salad, smoked salmon, avocado, tomato, lemon cream cheese.'),
       it('Poulet', 'Chicken club', '19 €',
-        'Salade, filet de poulet, œuf, tomate, sauce Caesar maison.',
-        'Salad, chicken fillet, egg, tomato, homemade Caesar dressing.'),
+        'Salade, filet de poulet, œuf, tomate, mayonnaise.',
+        'Salad, chicken fillet, egg, tomato, mayonnaise.'),
     ],
   },
   {
@@ -388,7 +408,7 @@ export const menu: MenuSection[] = [
     title: 'Les pâtes',
     titleEn: 'Pasta',
     items: [
-      it('Linguine au saumon', 'Linguine with salmon', '22 €'),
+      it('Linguine au saumon frais', 'Linguine with fresh salmon', '22 €'),
       it('Linguine aux légumes', 'Linguine with vegetables', '18 €', '', '', ['végé']),
       it('Ravioles gratinées', 'Baked ravioli', '20 €'),
       it('Gnocchi à la crème de truffe', 'Gnocchi with truffle cream', '23 €'),
@@ -399,6 +419,8 @@ export const menu: MenuSection[] = [
     group: 'cuisine',
     title: 'Les poissons',
     titleEn: 'Fish',
+    note: 'Accompagnement au choix : riz, frites ou poêlée de légumes. Accompagnement supplémentaire : 6 €.',
+    noteEn: 'Choice of side: rice, fries or stir-fried vegetables. Extra side: €6.',
     items: [
       it('Fish and chips, sauce tartare', 'Fish and chips, tartar sauce', '19 €'),
       it('Tartare de saumon frais à l’avocat', 'Fresh salmon tartare with avocado', '22 €'),
@@ -411,15 +433,14 @@ export const menu: MenuSection[] = [
     group: 'cuisine',
     title: 'Les viandes',
     titleEn: 'Meat',
-    note: 'Accompagnement au choix : riz, frites, pâtes ou poêlée de légumes.',
-    noteEn: 'Choice of side: rice, fries, pasta or stir-fried vegetables.',
+    note: 'Accompagnement au choix : riz, frites ou poêlée de légumes. Accompagnement supplémentaire : 6 €.',
+    noteEn: 'Choice of side: rice, fries or stir-fried vegetables. Extra side: €6.',
     items: [
       it('Steak haché à cheval', 'Steak topped with a fried egg', '19 €'),
       it('Tartare de bœuf', 'Beef tartare', '21 €'),
       it('Carpaccio de bœuf', 'Beef carpaccio', '21 €'),
       it('Escalope de poulet aux champignons', 'Chicken escalope with mushroom sauce', '20 €'),
       it('Belle entrecôte maturée Simmental', 'Dry-aged Simmental rib-eye', '32 €'),
-      it('Côte de veau dans le filet', 'Veal loin chop', '32 €'),
     ],
   },
   {
@@ -428,7 +449,7 @@ export const menu: MenuSection[] = [
     title: 'Pour finir',
     titleEn: 'To finish',
     items: [
-      it('Assiette de fromages', 'Cheese plate', '11 €'),
+      it('Assiette de fromages', 'Cheese plate', '12 €'),
       it('Le plateau de pâtisseries', 'Pastry tray', '9 €'),
       it('Le soufflé au Grand Marnier', 'Grand Marnier soufflé', '9 €'),
       it('L’omelette norvégienne', 'Baked Alaska', '9 €'),
@@ -449,27 +470,68 @@ export const menu: MenuSection[] = [
     ],
   },
 
+  /* ---------------- Happy hour ---------------- */
+  {
+    id: 'happy-verres',
+    group: 'happy',
+    title: 'Happy hour, 17h – 20h',
+    titleEn: 'Happy hour, 5 – 8 pm',
+    note: 'De 17h à 20h.',
+    noteEn: 'From 5 to 8 pm.',
+    items: [
+      it('Les spritz', 'Spritzes', '6,50 €', 'Aperol, Pink (mangue, passion), Campari, Limoncello ou Hugo.', 'Aperol, Pink (mango, passion fruit), Campari, Limoncello or Hugo.'),
+      it('Coupe de prosecco', 'Glass of prosecco', '5,50 €'),
+      it('Pinte de Stella Artois', 'Pint of Stella Artois', '6 €'),
+      it('Pinte de Hoegaarden blanche', 'Pint of Hoegaarden', '6 €'),
+      it('Le verre de vin de pays du Var', 'Glass of Var country wine', '4 €'),
+      it('Virgin Colada ou After Glow', 'Virgin Colada or After Glow', '6 €', 'Sans alcool. After Glow : ananas, orange, grenadine.', 'Alcohol-free. After Glow: pineapple, orange, grenadine.'),
+    ],
+  },
+  {
+    id: 'happy-vins',
+    group: 'happy',
+    title: 'La bouteille de vin à −30 %',
+    titleEn: 'Bottles of wine, 30% off',
+    note: 'De 16h à 22h. Prix avant / après remise.',
+    noteEn: 'From 4 to 10 pm. Price before / after discount.',
+    items: [
+      it('Château Tour Saint-Honoré (bio), rouge', 'Château Tour Saint-Honoré (organic), red', '28 € → 19,60 €', 'AOP Provence.', 'AOP Provence.'),
+      it('Beaumes de Venise, Dom Venitia', 'Beaumes de Venise, Dom Venitia', '34 € → 23,80 €', 'AOP Côtes du Rhône, rouge.', 'AOP Côtes du Rhône, red.'),
+      it('Château La Trinité', 'Château La Trinité', '38 € → 26,80 €', 'AOP Saint-Émilion, rouge.', 'AOP Saint-Émilion, red.'),
+      it('Moulin de Gassac, pinot noir', 'Moulin de Gassac, Pinot Noir', '34 € → 23,80 €', 'IGP Pays d’Oc, rouge.', 'IGP Pays d’Oc, red.'),
+      it('Trivento', 'Trivento', '34 € → 23,80 €', 'Malbec, Argentine.', 'Malbec, Argentina.'),
+      it('Château Saint-Honoré (bio), blanc', 'Château Saint-Honoré (organic), white', '28 € → 19,60 €', 'AOP Provence.', 'AOP Provence.'),
+      it('Moulin de Gassac ou Domaine Durand, chardonnay', 'Moulin de Gassac or Domaine Durand, Chardonnay', '28 € → 19,60 €', 'IGP Méditerranée, blanc.', 'IGP Méditerranée, white.'),
+      it('Lambert de Valentinois', 'Lambert de Valentinois', '48 € → 33,60 €', 'Chablis.', 'Chablis.'),
+      it('Domaine Reverdy-Ducroux « Les Blanchaux »', 'Domaine Reverdy-Ducroux “Les Blanchaux”', '52 € → 36,40 €', 'Sancerre.', 'Sancerre.'),
+      it('Mirage (moelleux)', 'Mirage (sweet)', '28 € → 19,60 €', 'IGP Gascogne, gros manseng.', 'IGP Gascogne, Gros Manseng.'),
+      it('Château Tour Saint-Honoré, rosé', 'Château Tour Saint-Honoré, rosé', '28 € → 19,60 €', 'AOP Provence.', 'AOP Provence.'),
+      it('L’Irrésistible, rosé', 'L’Irrésistible, rosé', '38 € → 26,60 €', 'AOP Provence.', 'AOP Provence.'),
+      it('Château Minuty M, rosé', 'Château Minuty M, rosé', '45 € → 31,50 €', 'AOP Provence.', 'AOP Provence.'),
+    ],
+  },
+
   /* ---------------- Boissons ---------------- */
   {
     id: 'chaudes',
     group: 'boissons',
     title: 'Les boissons chaudes',
     titleEn: 'Hot drinks',
-    note: 'Supplément lait végétal : 1 €.',
-    noteEn: 'Plant-based milk: + €1.',
+    note: 'Supplément lait végétal (amande ou avoine) : 1 €.',
+    noteEn: 'Plant-based milk (almond or oat): + €1.',
     items: [
-      it('Espresso ou décaféiné', 'Espresso or decaf', '1,80 €'),
-      it('Américain', 'Americano', '2 €'),
-      it('Noisette', 'Noisette (espresso with a dash of milk)', '2 €'),
-      it('Espresso con panna (chantilly)', 'Espresso con panna (whipped cream)', '2,50 €'),
-      it('Café crème', 'Café crème', '3,50 €'),
-      it('Latte macchiato', 'Latte macchiato', '4,50 €'),
-      it('Moka', 'Mocha', '4,50 €'),
-      it('Cappuccino', 'Cappuccino', '4,50 €'),
-      it('Chocolat chaud', 'Hot chocolate', '4,50 €'),
-      it('Chocolat italien, au lait ou noir', 'Italian hot chocolate, milk or dark', '5,50 €'),
-      it('Chocolat viennois', 'Hot chocolate with whipped cream', '4,90 €'),
-      it('Lait froid ou chaud', 'Cold or hot milk', '2,90 €'),
+      it('Espresso ou décaféiné', 'Espresso or decaf', '2 €'),
+      it('Américain', 'Americano', '2,20 €'),
+      it('Noisette', 'Noisette (espresso with a dash of milk)', '2,20 €'),
+      it('Espresso con panna (chantilly)', 'Espresso con panna (whipped cream)', '3 €'),
+      it('Café crème', 'Café crème', '4 €'),
+      it('Latte macchiato', 'Latte macchiato', '5 €'),
+      it('Moka', 'Mocha', '5 €'),
+      it('Cappuccino', 'Cappuccino', '5 €'),
+      it('Chocolat chaud', 'Hot chocolate', '5 €'),
+      it('Chocolat italien, au lait ou noir', 'Italian hot chocolate, milk or dark', '6 €'),
+      it('Chocolat viennois', 'Hot chocolate with whipped cream', '6 €'),
+      it('Lait froid ou chaud', 'Cold or hot milk', '3 €'),
     ],
   },
   {
@@ -480,8 +542,6 @@ export const menu: MenuSection[] = [
     items: [
       it('Thé vert', 'Green tea', '4,50 €', 'Pure Green, menthe, jasmin.', 'Pure Green, mint, jasmine.'),
       it('Thé noir', 'Black tea', '4,50 €', 'Ceylan, Earl Grey Supreme, English Breakfast, vanille passion, citron bio, fruits rouges.', 'Ceylon, Earl Grey Supreme, English Breakfast, vanilla passion fruit, organic lemon, red berries.'),
-      it('Thé rooibos', 'Rooibos', '4,50 €', 'Vanille.', 'Vanilla.'),
-      it('Thé oolong', 'Oolong tea', '4,50 €', 'Grenade.', 'Pomegranate.'),
       it('Infusion', 'Herbal tea', '4,50 €', 'Tilleul, verveine menthe, camomille.', 'Linden, verbena and mint, chamomile.'),
     ],
   },
@@ -494,6 +554,7 @@ export const menu: MenuSection[] = [
       it('Café frappé', 'Iced coffee', '6 €'),
       it('Café frappé au lait', 'Iced latte', '6 €', 'Vanille, caramel, chocolat ou noisette.', 'Vanilla, caramel, chocolate or hazelnut.'),
       it('Chocolat glacé', 'Iced chocolate', '6 €'),
+      it('Matcha', 'Matcha', '8 €'),
     ],
   },
   {
@@ -502,11 +563,10 @@ export const menu: MenuSection[] = [
     title: 'Les fruits pressés',
     titleEn: 'Fresh-pressed juices',
     items: [
-      it('Orange pressée', 'Fresh orange juice', '5 €'),
-      it('Pomme pressée', 'Fresh apple juice', '5 €'),
-      it('Pamplemousse pressé', 'Fresh grapefruit juice', '6,50 €'),
-      it('Citron pressé', 'Fresh lemon juice', '6,50 €'),
-      it('Detox', 'Detox', '7 €', 'Pomme, carotte, gingembre.', 'Apple, carrot, ginger.'),
+      it('Orange pressée', 'Fresh orange juice', '5,50 €'),
+      it('Citron pressé', 'Fresh lemon juice', '5,50 €'),
+      it('Pomme pressée', 'Fresh apple juice', '5,50 €'),
+      it('Detox', 'Detox', '7,50 €', 'Pomme, carotte, gingembre.', 'Apple, carrot, ginger.'),
     ],
   },
   {
@@ -515,7 +575,7 @@ export const menu: MenuSection[] = [
     title: 'Les boissons fraîches',
     titleEn: 'Soft drinks',
     items: [
-      it('Sodas', 'Sodas', '4,90 €', 'Pepsi, Pepsi Max, 7Up, Ice Tea, Orangina, Fever-Tree tonic.', 'Pepsi, Pepsi Max, 7Up, iced tea, Orangina, Fever-Tree tonic.'),
+      it('Sodas', 'Sodas', '5,50 €', 'Pepsi, Pepsi Max, 7Up, Ice Tea, Orangina, Fever-Tree tonic.', 'Pepsi, Pepsi Max, 7Up, iced tea, Orangina, Fever-Tree tonic.'),
       it('Jus de fruits Pago', 'Pago fruit juice', '5,50 €', 'Ananas, fraise, tomate.', 'Pineapple, strawberry, tomato.'),
       it('Red Bull', 'Red Bull', '5,50 €'),
       it('Ginger beer', 'Ginger beer', '5,50 €'),
@@ -547,10 +607,10 @@ export const menu: MenuSection[] = [
     note: 'Pression : 25 cl / 50 cl / pichet. Supplément Picon ou sirop : 0,50 € (25 cl), 1 € (50 cl).',
     noteEn: 'Draught: 25 cl / 50 cl / pitcher. Picon or syrup: + €0.50 (25 cl), + €1 (50 cl).',
     items: [
-      it('Stella Artois', 'Stella Artois', '4 € / 7,50 € / 12 €'),
-      it('Hoegaarden', 'Hoegaarden', '4,50 € / 8 € / 13 €'),
-      it('Leffe', 'Leffe', '4,90 € / 8,50 € / 14 €'),
-      it('Panaché', 'Shandy', '4 € / 7,50 €'),
+      it('Stella Artois', 'Stella Artois', '4,50 € / 8 € / 13 €'),
+      it('Hoegaarden', 'Hoegaarden', '5 € / 8,50 € / 14 €'),
+      it('Leffe', 'Leffe', '5,50 € / 9 € / 15 €'),
+      it('Panaché', 'Shandy', '4,50 € / 8 €'),
       it('En bouteille, 33 cl', 'Bottled, 33 cl', '6,50 €', 'Desperados, Corona, Corona 0.0, IPA locale.', 'Desperados, Corona, Corona 0.0, local IPA.'),
     ],
   },
@@ -560,25 +620,23 @@ export const menu: MenuSection[] = [
     title: 'Les cocktails',
     titleEn: 'Cocktails',
     items: [
-      it('Lynchburg Lemonade', 'Lynchburg Lemonade', '12 €', 'Jack Daniel’s, Cointreau, citron vert, sirop de sucre de canne. Choisissez votre Jack : Classic, Honey, Apple, Fire ou Blackberry.', 'Jack Daniel’s, Cointreau, lime, cane sugar syrup. Pick your Jack: Classic, Honey, Apple, Fire or Blackberry.', ['signature']),
-      it('Américano', 'Americano', '10 €', 'Campari, Martini rouge, Martini blanc, eau gazeuse.', 'Campari, red Martini, white Martini, soda water.'),
-      it('Aperol Spritz', 'Aperol Spritz', '10 €', 'Aperol, prosecco, eau gazeuse.', 'Aperol, prosecco, soda water.'),
-      it('Pink Spritz', 'Pink Spritz', '10 €', 'Sarti, prosecco, eau gazeuse.', 'Sarti, prosecco, soda water.'),
-      it('Hugo Spritz', 'Hugo Spritz', '10 €', 'Prosecco, fleur de sureau, eau gazeuse, menthe fraîche.', 'Prosecco, elderflower, soda water, fresh mint.'),
-      it('Saint-Germain Spritz', 'Saint-Germain Spritz', '13 €', 'Saint-Germain, prosecco, eau gazeuse.', 'Saint-Germain, prosecco, soda water.'),
-      it('Spritz Royal', 'Spritz Royal', '14 €', 'Aperol, champagne, eau gazeuse.', 'Aperol, champagne, soda water.'),
-      it('Mojito', 'Mojito', '10 €', 'Bacardi, sucre de canne, menthe fraîche, citron vert, eau gazeuse.', 'Bacardi, cane sugar, fresh mint, lime, soda water.'),
-      it('Mojito fruits', 'Fruit mojito', '11 €', 'Le mojito, avec le fruit du moment.', 'The mojito, with the fruit of the moment.'),
-      it('Moscow Mule', 'Moscow Mule', '11 €', 'Vodka, ginger beer, citron vert.', 'Vodka, ginger beer, lime.'),
+      it('Lynchburg Lemonade', 'Lynchburg Lemonade', '13 €', 'Jack Daniel’s, Cointreau, citron vert, sirop de sucre de canne. Choisissez votre Jack : Classic, Honey, Apple, Fire ou Blackberry.', 'Jack Daniel’s, Cointreau, lime, cane sugar syrup. Pick your Jack: Classic, Honey, Apple, Fire or Blackberry.', ['signature']),
+      it('Les spritz', 'Spritzes', '10 €', 'Aperol, Pink (mangue, passion), Campari, Limoncello ou Hugo.', 'Aperol, Pink (mango, passion fruit), Campari, Limoncello or Hugo.'),
+      it('Saint-Germain Spritz', 'Saint-Germain Spritz', '14 €', 'Saint-Germain, prosecco, eau gazeuse.', 'Saint-Germain, prosecco, soda water.'),
+      it('Spritz Royal', 'Spritz Royal', '15 €', 'Aperol, champagne, eau gazeuse.', 'Aperol, champagne, soda water.'),
+      it('Negroni', 'Negroni', '12 €', 'Gin Beefeater, Martini rouge, Campari.', 'Beefeater gin, red Martini, Campari.'),
+      it('Mojito', 'Mojito', '12 €', 'Havana, sucre de canne, menthe fraîche, citron vert, eau gazeuse. Avec fruits : + 1 €.', 'Havana rum, cane sugar, fresh mint, lime, soda water. With fruit: + €1.'),
+      it('Sex on the Beach', 'Sex on the Beach', '11 €', 'Vodka Wyborowa, liqueur de pêche, jus d’orange, cranberry.', 'Wyborowa vodka, peach liqueur, orange juice, cranberry.'),
+      it('Paloma', 'Paloma', '11 €', 'Tequila, jus de pamplemousse, citron vert, sirop de sucre.', 'Tequila, grapefruit juice, lime, sugar syrup.'),
+      it('Moscow Mule', 'Moscow Mule', '12 €', 'Vodka, ginger beer, citron vert.', 'Vodka, ginger beer, lime.'),
       it('Ti’ punch', 'Ti’ punch', '10 €', 'Rhum blanc, citron vert, sucre de canne.', 'White rum, lime, cane sugar.'),
       it('Cuba Libre', 'Cuba Libre', '10 €', 'Rhum, citron vert, Pepsi, sucre de canne.', 'Rum, lime, Pepsi, cane sugar.'),
-      it('Piña colada', 'Piña colada', '11 €', 'Rhum, purée de coco, jus d’ananas.', 'Rum, coconut purée, pineapple juice.'),
-      it('Caipirinha', 'Caipirinha', '10 €', 'Cachaça, sucre de canne, citron vert.', 'Cachaça, cane sugar, lime.'),
-      it('Caipirinha fruits', 'Fruit caipirinha', '11 €', 'La caipirinha, avec le fruit du moment.', 'The caipirinha, with the fruit of the moment.'),
-      it('Espresso Martini', 'Espresso Martini', '12 €', 'Espresso, liqueur de café, vodka, sirop de sucre.', 'Espresso, coffee liqueur, vodka, sugar syrup.'),
-      it('Pornstar Martini', 'Pornstar Martini', '12 €', 'Vodka, liqueur de fruit de la passion, sirop de vanille, jus de citron vert.', 'Vodka, passion fruit liqueur, vanilla syrup, lime juice.'),
-      it('Long Island', 'Long Island', '12 €', 'Gin, tequila, vodka, rhum blanc, Cointreau, Coca-Cola, jus de citron.', 'Gin, tequila, vodka, white rum, Cointreau, cola, lemon juice.'),
-      it('Jack Blackberry Smash', 'Jack Blackberry Smash', '12 €', 'Jack Daniel’s Blackberry, sucre de canne, citron vert, menthe.', 'Jack Daniel’s Blackberry, cane sugar, lime, mint.'),
+      it('Piña colada', 'Piña colada', '12 €', 'Rhum, purée de coco, jus d’ananas.', 'Rum, coconut purée, pineapple juice.'),
+      it('Caipirinha', 'Caipirinha', '11 €', 'Cachaça, sucre de canne, citron vert. Avec fruits : + 1 €.', 'Cachaça, cane sugar, lime. With fruit: + €1.'),
+      it('Espresso Martini', 'Espresso Martini', '13 €', 'Espresso, liqueur de café, vodka, sirop de sucre.', 'Espresso, coffee liqueur, vodka, sugar syrup.'),
+      it('Pornstar Martini', 'Pornstar Martini', '13 €', 'Vodka, liqueur de fruit de la passion, sirop de vanille, jus de citron vert.', 'Vodka, passion fruit liqueur, vanilla syrup, lime juice.'),
+      it('Long Island', 'Long Island', '13 €', 'Gin, tequila, vodka, rhum blanc, Cointreau, Coca-Cola, jus de citron.', 'Gin, tequila, vodka, white rum, Cointreau, cola, lemon juice.'),
+      it('Jack Blackberry Smash', 'Jack Blackberry Smash', '13 €', 'Jack Daniel’s Blackberry, sucre de canne, citron vert, menthe.', 'Jack Daniel’s Blackberry, cane sugar, lime, mint.'),
     ],
   },
   {
@@ -592,7 +650,7 @@ export const menu: MenuSection[] = [
       it('Virgin Mojito', 'Virgin Mojito', '8 €'),
       it('Virgin Aperol bitter', 'Virgin Aperol bitter', '8 €'),
       it('Virgin Colada', 'Virgin Colada', '8 €'),
-      it('After Glow', 'After Glow', '8 €'),
+      it('After Glow', 'After Glow', '8 €', 'Ananas, orange, grenadine.', 'Pineapple, orange, grenadine.'),
       it('Gin tonic 0.0', 'Gin & tonic 0.0', '12 €'),
     ],
   },
@@ -677,10 +735,10 @@ export const menu: MenuSection[] = [
     items: [
       it('Château Saint-Honoré (bio)', 'Château Saint-Honoré (organic)', '6 € / 28 €', 'AOP Provence.', 'AOP Provence.'),
       it('Moulin de Gassac, chardonnay', 'Moulin de Gassac, Chardonnay', '6 € / 28 €', 'IGP Méditerranée.', 'IGP Méditerranée.'),
-      it('Ribeaupierre, chardonnay', 'Ribeaupierre, Chardonnay', '4,50 €', 'Au verre.', 'By the glass.'),
+      it('Domaine Durand, chardonnay', 'Domaine Durand, Chardonnay', '4,50 €', 'Au verre.', 'By the glass.'),
       it('Lambert de Valentinois', 'Lambert de Valentinois', '9 € / 48 €', 'Chablis.', 'Chablis.'),
       it('Domaine Reverdy-Ducroux « Les Blanchaux »', 'Domaine Reverdy-Ducroux “Les Blanchaux”', '10 € / 52 €', 'Sancerre.', 'Sancerre.'),
-      it('Mirage', 'Mirage', '6 € / 28 €', 'IGP Gascogne.', 'IGP Gascogne.'),
+      it('Mirage (moelleux)', 'Mirage (sweet)', '6 € / 28 €', 'IGP Gascogne, gros manseng.', 'IGP Gascogne, Gros Manseng.'),
     ],
   },
   {
@@ -837,7 +895,7 @@ export const faq = [
   },
   {
     q: 'Vous avez des plats végétariens ou vegan ?',
-    a: 'Oui : la salade Veggie falafel, les linguine aux légumes, la pinsa Margherita. Pour les allergies et intolérances, demandez le tableau des allergènes à l’équipe.',
+    a: 'Oui : la salade Veggie falafel, les linguine aux légumes, la pinsa Marguerite. Pour les allergies et intolérances, demandez le tableau des allergènes à l’équipe.',
     qEn: 'Do you have vegetarian or vegan dishes?',
     aEn: 'Yes: the Veggie falafel salad, linguine with vegetables, and the Margherita pinsa. For allergies or intolerances, ask the team for the allergen chart.',
   },

@@ -11,14 +11,14 @@ import { site, pitch, moments, menu, menuGroups, menuNote, ratings, reviews, aro
 const crates = [
   { photo: '/images/petit-dej-terrasse.jpg', fr: 'Croissant, jus pressé', en: 'Croissant, fresh juice', tag: 'dès 9h', tagEn: 'from 9 am', alt: 'Croissant, jus d’orange pressé et café sur la terrasse au soleil', stamp: 'CAT. MATIN' },
   { photo: '/images/salade-cesar.jpg', fr: 'Salade Caesar', en: 'Caesar salad', tag: 'le midi', tagEn: 'lunch', alt: 'Salade Caesar au poulet croustillant, croûtons et parmesan', stamp: 'CAT. EXTRA' },
-  { photo: '/images/cocktail-terrasse.jpg', fr: 'Spritz en terrasse', en: 'Spritz on the terrace', tag: '17h–20h', tagEn: '5–8 pm', alt: 'Cocktail rouge à la menthe sur une table en marbre noir de la terrasse', stamp: 'ORIG. CANNES' },
+  { photo: '/images/cocktail-terrasse.jpg', fr: 'Spritz en terrasse', en: 'Spritz on the terrace', tag: 'happy hour 17h–20h', tagEn: 'happy hour 5–8 pm', alt: 'Cocktail rouge à la menthe sur une table en marbre noir de la terrasse', stamp: 'ORIG. CANNES' },
 ];
 const google = ratings.find((r) => /google/i.test(r.source));
 const others = ratings.filter((r) => r !== google);
 /** Typographie française : espace fine insécable avant ? ! : ; » et après «, pour qu'aucun signe ne tombe seul à la ligne. */
 const fine = (t: string) => t.replace(/ ([?!:;»])/g, '\u202f$1').replace(/« /g, '«\u202f');
 ---
-<Base title="Bar-brasserie à Cannes, face aux Allées de la Liberté | Frensh" description="Rue Félix Faure, près du Vieux-Port. Ouvert 7j/7 de 9h à 22h30, terrasse au soleil, du petit-déj à 8,90 € au dîner. Cuisine faite sur place." theme="#36452c" current={1}>
+<Base title="Bar-brasserie à Cannes, face aux Allées de la Liberté | Frensh" description="Rue Félix Faure, près du Vieux-Port. Ouvert 7j/7 de 9h à 22h30, terrasse au soleil, du petit-déj à 10 € au dîner. Cuisine faite sur place." theme="#36452c" current={1}>
   <div class="m">
     <header class="top">
       <a href="#" class="logo" aria-label="Frensh, accueil"><Logo /></a>
